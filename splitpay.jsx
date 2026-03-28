@@ -75,7 +75,7 @@ function EntryRow({ entry, names, onDelete, isCompleted }) {
       </div>
     );
   }
-  if (entry.type === "repayment") {
+  if (entry.type === "repayment" || entry.type === "repay") {
     return (
       <div style={{ background:"#fff", borderRadius:12, padding:"12px 14px",
         marginBottom:8, display:"flex", alignItems:"center", gap:10,
@@ -227,15 +227,20 @@ export default function App() {
   const diff = totA - totB;
 
   // 借りモード計算
-  const withRemaining = (b) => {
-    const repaid = activeEntries
-      .filter((e)=>e.type==="repayment"&&e.borrowId===b.id)
-      .reduce((s,e)=>s+e.amount,0);
+  const isRepayType = (e) => e.type==="repayment" || e.type==="repay"; // 旧スキーマ互換
+  const calcRemaining = (b, pool) => {
+    const repaid = pool.filter((e)=>isRepayType(e)&&e.borrowId===b.id).reduce((s,e)=>s+e.amount,0);
     return { ...b, repaid, remaining: b.amount - repaid };
   };
-  const borrowsInPeriod = activeEntries.filter((e)=>e.type==="borrow").map(withRemaining);
-  const activeBorrows   = borrowsInPeriod.filter((b)=>b.remaining>0);
-  const completedBorrowIds = new Set(borrowsInPeriod.filter((b)=>b.remaining<=0).map((b)=>b.id));
+  const borrowsInPeriod    = activeEntries.filter((e)=>e.type==="borrow").map((b)=>calcRemaining(b, activeEntries));
+  const activeBorrows      = borrowsInPeriod.filter((b)=>b.remaining>0);
+  // completedBorrowIds は allCur 全体で判定（履歴タブでリセット前の完済も正しく表示するため）
+  const completedBorrowIds = new Set(
+    allCur.filter((e)=>e.type==="borrow")
+      .map((b)=>calcRemaining(b, allCur))
+      .filter((b)=>b.remaining<=0)
+      .map((b)=>b.id)
+  );
 
   const curMode = books.find((b)=>b.id===bookId)?.mode || "split";
   const uColor  = (u) => u==="A" ? CA : CB;
@@ -683,7 +688,7 @@ export default function App() {
                 <div style={{ fontSize:12,color:"#999",marginTop:4 }}>
                   {fmtDate(confirmDelete.date)} ·{" "}
                   {confirmDelete.type==="borrow" ? `${names[confirmDelete.borrower]||confirmDelete.borrower}が借りる`
-                   : confirmDelete.type==="repayment" ? "返済"
+                   : (confirmDelete.type==="repayment"||confirmDelete.type==="repay") ? "返済"
                    : names[confirmDelete.user]||confirmDelete.user}
                   {confirmDelete.memo ? ` · ${confirmDelete.memo}` : ""}
                 </div>
