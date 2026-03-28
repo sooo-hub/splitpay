@@ -31,15 +31,15 @@ const fmt     = (n) => `¥${Math.abs(Math.round(n)).toLocaleString("ja-JP")}`;
 const fmtDate = (iso) => { const d = new Date(iso); return `${d.getMonth()+1}/${d.getDate()}`; };
 const genId   = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
 
-function EntryRow({ entry, names, onDelete }) {
+// ── EntryRow (履歴タブ用フラットリスト) ──
+function EntryRow({ entry, names, onDelete, isCompleted }) {
   if (entry.type === "reset") {
     const isDebtReset = entry.snapshot?.debt !== undefined;
     return (
       <div style={{ background:"#FFF8F0", border:"1px solid #FFE0C8", borderRadius:12,
         padding:"10px 14px", marginBottom:8, display:"flex", alignItems:"center", gap:10 }}>
         <div style={{ width:28, height:28, borderRadius:8, background:"#FF9A6C",
-          display:"flex", alignItems:"center", justifyContent:"center",
-          fontSize:13, flexShrink:0 }}>🔄</div>
+          display:"flex", alignItems:"center", justifyContent:"center", fontSize:13, flexShrink:0 }}>🔄</div>
         <div style={{ flex:1, minWidth:0 }}>
           <div style={{ fontSize:13, fontWeight:700, color:"#C05000" }}>リセット</div>
           <div style={{ fontSize:11, color:"#C08060", marginTop:1, lineHeight:1.5 }}>
@@ -48,7 +48,7 @@ function EntryRow({ entry, names, onDelete }) {
               : `${names.A} ${fmt(entry.snapshot?.totA??0)} / ${names.B} ${fmt(entry.snapshot?.totB??0)}`}
           </div>
         </div>
-        <button onClick={() => onDelete(entry.id)} style={{ background:"none", border:"none",
+        <button onClick={() => onDelete(entry)} style={{ background:"none", border:"none",
           color:"#e0c0a0", fontSize:15, cursor:"pointer", padding:"4px 6px", flexShrink:0, lineHeight:1 }}>✕</button>
       </div>
     );
@@ -58,39 +58,42 @@ function EntryRow({ entry, names, onDelete }) {
       <div style={{ background:"#fff", borderRadius:12, padding:"12px 14px",
         marginBottom:8, display:"flex", alignItems:"center", gap:10,
         boxShadow:"0 1px 6px rgba(0,0,0,0.05)" }}>
-        <div style={{ width:28, height:28, borderRadius:8, background:CBORROW,
-          display:"flex", alignItems:"center", justifyContent:"center",
-          fontSize:14, flexShrink:0 }}>💸</div>
+        <div style={{ width:28, height:28, borderRadius:8, background:isCompleted?"#AAA":CBORROW,
+          display:"flex", alignItems:"center", justifyContent:"center", fontSize:14, flexShrink:0 }}>💸</div>
         <div style={{ flex:1, minWidth:0 }}>
-          <div style={{ fontSize:15, fontWeight:700, color:"#1A1A1A", letterSpacing:"-0.3px" }}>{fmt(entry.amount)}</div>
+          <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+            <div style={{ fontSize:15, fontWeight:700, color:"#1A1A1A", letterSpacing:"-0.3px" }}>{fmt(entry.amount)}</div>
+            {isCompleted && <div style={{ fontSize:10, fontWeight:700, color:"#22C55E", background:"#22C55E18",
+              padding:"1px 6px", borderRadius:10 }}>完済</div>}
+          </div>
           <div style={{ fontSize:11, color:"#999", marginTop:1 }}>
-            {fmtDate(entry.date)} · {names.A}が借りる{entry.memo ? ` · ${entry.memo}` : ""}
+            {fmtDate(entry.date)} · {names[entry.borrower]||entry.borrower}が借りる{entry.memo ? ` · ${entry.memo}` : ""}
           </div>
         </div>
-        <button onClick={() => onDelete(entry.id)} style={{ background:"none", border:"none",
+        <button onClick={() => onDelete(entry)} style={{ background:"none", border:"none",
           color:"#ccc", fontSize:15, cursor:"pointer", padding:"4px 6px", flexShrink:0, lineHeight:1 }}>✕</button>
       </div>
     );
   }
-  if (entry.type === "repay") {
+  if (entry.type === "repayment") {
     return (
       <div style={{ background:"#fff", borderRadius:12, padding:"12px 14px",
         marginBottom:8, display:"flex", alignItems:"center", gap:10,
         boxShadow:"0 1px 6px rgba(0,0,0,0.05)" }}>
         <div style={{ width:28, height:28, borderRadius:8, background:CREPAY,
-          display:"flex", alignItems:"center", justifyContent:"center",
-          fontSize:14, flexShrink:0 }}>✅</div>
+          display:"flex", alignItems:"center", justifyContent:"center", fontSize:14, flexShrink:0 }}>✅</div>
         <div style={{ flex:1, minWidth:0 }}>
           <div style={{ fontSize:15, fontWeight:700, color:"#1A1A1A", letterSpacing:"-0.3px" }}>{fmt(entry.amount)}</div>
           <div style={{ fontSize:11, color:"#999", marginTop:1 }}>
             {fmtDate(entry.date)} · 返済{entry.memo ? ` · ${entry.memo}` : ""}
           </div>
         </div>
-        <button onClick={() => onDelete(entry.id)} style={{ background:"none", border:"none",
+        <button onClick={() => onDelete(entry)} style={{ background:"none", border:"none",
           color:"#ccc", fontSize:15, cursor:"pointer", padding:"4px 6px", flexShrink:0, lineHeight:1 }}>✕</button>
       </div>
     );
   }
+  // payment
   const c = entry.user === "A" ? CA : CB;
   return (
     <div style={{ background:"#fff", borderRadius:12, padding:"12px 14px",
@@ -98,8 +101,7 @@ function EntryRow({ entry, names, onDelete }) {
       boxShadow:"0 1px 6px rgba(0,0,0,0.05)" }}>
       <div style={{ width:28, height:28, borderRadius:8, background:c,
         display:"flex", alignItems:"center", justifyContent:"center",
-        fontSize:11, fontWeight:700, color:"#fff", flexShrink:0,
-        fontFamily:"'Sora',sans-serif" }}>
+        fontSize:11, fontWeight:700, color:"#fff", flexShrink:0, fontFamily:"'Sora',sans-serif" }}>
         {(names[entry.user]||entry.user)[0]?.toUpperCase()}
       </div>
       <div style={{ flex:1, minWidth:0 }}>
@@ -108,8 +110,62 @@ function EntryRow({ entry, names, onDelete }) {
           {fmtDate(entry.date)} · {names[entry.user]||entry.user}{entry.memo ? ` · ${entry.memo}` : ""}
         </div>
       </div>
-      <button onClick={() => onDelete(entry.id)} style={{ background:"none", border:"none",
+      <button onClick={() => onDelete(entry)} style={{ background:"none", border:"none",
         color:"#ccc", fontSize:15, cursor:"pointer", padding:"4px 6px", flexShrink:0, lineHeight:1 }}>✕</button>
+    </div>
+  );
+}
+
+// ── BorrowCard (借りモードのアクティブ借り) ──
+function BorrowCard({ borrow, names, onRepay, onDelete }) {
+  const pct = Math.min(100, Math.round((borrow.repaid / borrow.amount) * 100));
+  return (
+    <div style={{ background:"#fff", borderRadius:16, padding:"16px", marginBottom:10,
+      boxShadow:"0 2px 12px rgba(0,0,0,0.07)" }}>
+      <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom:10 }}>
+        <div style={{ flex:1, minWidth:0 }}>
+          <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:4 }}>
+            <div style={{ width:26, height:26, borderRadius:7, background:CBORROW,
+              display:"flex", alignItems:"center", justifyContent:"center",
+              fontSize:12, fontWeight:700, color:"#fff", flexShrink:0, fontFamily:"'Sora',sans-serif" }}>
+              {(names[borrow.borrower]||borrow.borrower)[0]?.toUpperCase()}
+            </div>
+            <div style={{ fontSize:14, fontWeight:700, color:"#1A1A1A" }}>
+              {names[borrow.borrower]} が借りる
+            </div>
+          </div>
+          {borrow.memo && <div style={{ fontSize:11, color:"#AAA", paddingLeft:34 }}>{borrow.memo}</div>}
+        </div>
+        <button onClick={() => onDelete(borrow)} style={{ background:"none", border:"none",
+          color:"#DDD", fontSize:15, cursor:"pointer", padding:"2px 4px", flexShrink:0, lineHeight:1 }}>✕</button>
+      </div>
+
+      <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
+        <div>
+          <div style={{ fontSize:11, color:"#AAA", marginBottom:2 }}>残り</div>
+          <div style={{ fontSize:24, fontWeight:700, color:CBORROW, fontFamily:"'Sora',sans-serif",
+            letterSpacing:"-0.5px" }}>{fmt(borrow.remaining)}</div>
+        </div>
+        <div style={{ textAlign:"right" }}>
+          <div style={{ fontSize:11, color:"#AAA", marginBottom:2 }}>元金 / 返済済み</div>
+          <div style={{ fontSize:13, color:"#888", fontFamily:"'Sora',sans-serif" }}>
+            {fmt(borrow.amount)} / {fmt(borrow.repaid)}
+          </div>
+        </div>
+      </div>
+
+      {borrow.repaid > 0 && (
+        <div style={{ background:"#F5F3EE", borderRadius:8, height:6, marginBottom:10, overflow:"hidden" }}>
+          <div style={{ background:CREPAY, height:"100%", width:`${pct}%`, borderRadius:8, transition:"width 0.3s" }}/>
+        </div>
+      )}
+
+      <button onClick={() => onRepay(borrow)} style={{ width:"100%", padding:"11px",
+        background:CREPAY, color:"#fff", border:"none", borderRadius:12,
+        fontSize:14, fontWeight:700, cursor:"pointer", fontFamily:"'Noto Sans JP',sans-serif",
+        boxShadow:`0 3px 12px ${CREPAY}40` }}>
+        ✅ 返した
+      </button>
     </div>
   );
 }
@@ -123,7 +179,9 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [lastSync,setLastSync]= useState(null);
 
+  // sheet: null | {type:"payment",user} | {type:"borrow"} | {type:"repay",borrow,remaining}
   const [sheet,      setSheet]      = useState(null);
+  const [borrower,   setBorrower]   = useState("A");
   const [amount,     setAmount]     = useState("");
   const [memo,       setMemo]       = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -163,24 +221,41 @@ export default function App() {
   const lastResetPos  = chronoCur.findLastIndex((e)=>e.type==="reset");
   const activeEntries = lastResetPos===-1 ? allCur : allCur.slice(0, allCur.length - lastResetPos - 1);
 
-  // 差額モード
+  // 差額モード計算
   const totA = activeEntries.filter((e)=>e.user==="A"&&e.type!=="reset").reduce((s,e)=>s+e.amount,0);
   const totB = activeEntries.filter((e)=>e.user==="B"&&e.type!=="reset").reduce((s,e)=>s+e.amount,0);
   const diff = totA - totB;
 
-  // 借りモード
-  const totalBorrow = activeEntries.filter((e)=>e.type==="borrow").reduce((s,e)=>s+e.amount,0);
-  const totalRepay  = activeEntries.filter((e)=>e.type==="repay").reduce((s,e)=>s+e.amount,0);
-  const debt = totalBorrow - totalRepay;
+  // 借りモード計算
+  const withRemaining = (b) => {
+    const repaid = activeEntries
+      .filter((e)=>e.type==="repayment"&&e.borrowId===b.id)
+      .reduce((s,e)=>s+e.amount,0);
+    return { ...b, repaid, remaining: b.amount - repaid };
+  };
+  const borrowsInPeriod = activeEntries.filter((e)=>e.type==="borrow").map(withRemaining);
+  const activeBorrows   = borrowsInPeriod.filter((b)=>b.remaining>0);
+  const completedBorrowIds = new Set(borrowsInPeriod.filter((b)=>b.remaining<=0).map((b)=>b.id));
 
   const curMode = books.find((b)=>b.id===bookId)?.mode || "split";
   const uColor  = (u) => u==="A" ? CA : CB;
 
-  // Drawer の色・タイトル
-  const sheetColor    = sheet==="borrow" ? CBORROW : sheet==="repay" ? CREPAY : (sheet ? uColor(sheet) : "#ccc");
-  const sheetTitle    = sheet==="borrow" ? `${names.A} が借りる` : sheet==="repay" ? "返した" : (sheet ? `${names[sheet]} の支払いを記録` : "");
-  const sheetIcon     = sheet==="borrow" ? "💸" : sheet==="repay" ? "✅" : (sheet ? (names[sheet]||sheet)[0]?.toUpperCase() : "");
-  const sheetIsEmoji  = sheet==="borrow" || sheet==="repay";
+  // Drawer の色・ラベル
+  const sheetColor = sheet?.type==="repay" ? CREPAY : sheet?.type==="borrow" ? CBORROW
+    : (sheet?.user ? uColor(sheet.user) : "#ccc");
+  const sheetTitle = sheet?.type==="repay"
+    ? "返済を記録"
+    : sheet?.type==="borrow"
+    ? "借りる記録"
+    : sheet?.user ? `${names[sheet.user]} の支払いを記録` : "";
+
+  const closeSheet = () => { setSheet(null); setAmount(""); setMemo(""); setBorrower("A"); };
+
+  const openRepay = (borrow) => {
+    setSheet({ type:"repay", borrow });
+    setAmount(String(borrow.remaining));
+    setMemo("");
+  };
 
   const handleSubmit = async () => {
     const n = parseInt(amount.replace(/[^0-9]/g,""),10);
@@ -188,31 +263,36 @@ export default function App() {
     setSubmitting(true);
     try {
       let entry;
-      if (sheet==="borrow"||sheet==="repay") {
-        entry = { id:genId(), bookId, type:sheet, amount:n, memo:memo.trim(), date:new Date().toISOString() };
-      } else {
-        entry = { id:genId(), bookId, type:"payment", user:sheet, amount:n, memo:memo.trim(), date:new Date().toISOString() };
+      if (sheet.type==="payment") {
+        entry = { id:genId(), bookId, type:"payment", user:sheet.user, amount:n, memo:memo.trim(), date:new Date().toISOString() };
+      } else if (sheet.type==="borrow") {
+        entry = { id:genId(), bookId, type:"borrow", borrower, amount:n, memo:memo.trim(), date:new Date().toISOString() };
+      } else if (sheet.type==="repay") {
+        entry = { id:genId(), bookId, type:"repayment", borrowId:sheet.borrow.id, amount:n, memo:memo.trim(), date:new Date().toISOString() };
       }
       await saveEntries([entry,...entries]);
-      setSheet(null); setAmount(""); setMemo("");
+      closeSheet();
     } finally { setSubmitting(false); }
   };
 
   const handleReset = async () => {
-    const snapshot = curMode==="debt" ? { debt } : { totA, totB };
+    const snapshot = curMode==="debt" ? { activeBorrows: activeBorrows.length } : { totA, totB };
     await saveEntries([{id:genId(),bookId,type:"reset",snapshot,date:new Date().toISOString()},...entries]);
     setShowReset(false);
   };
 
   const handleDelete      = async (id) => saveEntries(entries.filter((e)=>e.id!==id));
   const requestDelete     = (entry) => setConfirmDelete(entry);
-  const confirmDeleteEntry = async () => { if (!confirmDelete) return; await handleDelete(confirmDelete.id); setConfirmDelete(null); };
+  const confirmDeleteEntry = async () => {
+    if (!confirmDelete) return;
+    await handleDelete(confirmDelete.id);
+    setConfirmDelete(null);
+  };
 
   const handleAddBook = async () => {
     if (!newBookName.trim()) return;
     await saveBooks([...books,{id:genId(),name:newBookName.trim(),mode:newBookMode}]);
-    setNewBookName("");
-    setNewBookMode("split");
+    setNewBookName(""); setNewBookMode("split");
   };
 
   const handleDeleteBook = async (id) => {
@@ -225,8 +305,7 @@ export default function App() {
 
   const handleSaveNames = async () => {
     if (!editNames) return;
-    const c = { A:editNames.A.trim()||"A", B:editNames.B.trim()||"B" };
-    await saveNames(c);
+    await saveNames({ A:editNames.A.trim()||"A", B:editNames.B.trim()||"B" });
     setEditNames(null);
   };
 
@@ -265,8 +344,8 @@ export default function App() {
       {tab==="home" && (
         <div style={{ padding:"20px 16px" }}>
 
-          {/* 差額モード Balance */}
-          {curMode==="split" && (
+          {/* ── 差額モード ── */}
+          {curMode==="split" && (<>
             <div style={{ background:"#fff",borderRadius:22,padding:"28px 24px 22px",
               marginBottom:14,boxShadow:"0 2px 20px rgba(0,0,0,0.06)",textAlign:"center" }}>
               {diff===0 ? (
@@ -298,53 +377,14 @@ export default function App() {
                 🔄 リセット
               </button>
             </div>
-          )}
 
-          {/* 借りモード Balance */}
-          {curMode==="debt" && (
-            <div style={{ background:"#fff",borderRadius:22,padding:"28px 24px 22px",
-              marginBottom:14,boxShadow:"0 2px 20px rgba(0,0,0,0.06)",textAlign:"center" }}>
-              {debt<=0 ? (
-                <>
-                  <div style={{ fontSize:12,color:"#AAA",marginBottom:10,letterSpacing:"0.5px",fontWeight:500 }}>残り借り</div>
-                  <div style={{ fontSize:38,fontWeight:700,color:"#22C55E",fontFamily:numFont,letterSpacing:"-1px" }}>フラット！ 🎉</div>
-                  <div style={{ fontSize:12,color:"#bbb",marginTop:8 }}>借りはありません</div>
-                </>
-              ) : (
-                <>
-                  <div style={{ fontSize:12,color:"#AAA",marginBottom:10,letterSpacing:"0.5px",fontWeight:500 }}>残り借り</div>
-                  <div style={{ display:"inline-block",padding:"3px 12px",borderRadius:20,
-                    background:`${CBORROW}18`,color:CBORROW,
-                    fontSize:11,fontWeight:700,letterSpacing:"0.5px",marginBottom:10 }}>
-                    {names.A} が {names.B} に借りています
-                  </div>
-                  <div style={{ fontSize:50,fontWeight:700,fontFamily:numFont,
-                    color:CBORROW,letterSpacing:"-2px",lineHeight:1 }}>{fmt(debt)}</div>
-                  <div style={{ fontSize:12,color:"#bbb",marginTop:14 }}>
-                    合計借り {fmt(totalBorrow)} · 返済済み {fmt(totalRepay)}
-                  </div>
-                </>
-              )}
-              <button onClick={()=>setShowReset(true)} style={{ marginTop:18,background:"none",
-                border:"1.5px solid #E0DDD8",borderRadius:10,padding:"7px 20px",
-                fontSize:12,color:"#AAA",cursor:"pointer",fontFamily:font,fontWeight:600 }}>
-                🔄 リセット
-              </button>
-            </div>
-          )}
-
-          {/* Quick add */}
-          <div style={{ fontSize:11,color:"#AAA",marginBottom:8,fontWeight:600,paddingLeft:4,letterSpacing:"0.5px" }}>
-            {curMode==="debt" ? "記録を追加" : "支払いを追加"}
-          </div>
-
-          {curMode==="split" && (
+            <div style={{ fontSize:11,color:"#AAA",marginBottom:8,fontWeight:600,paddingLeft:4,letterSpacing:"0.5px" }}>支払いを追加</div>
             <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:24 }}>
               {["A","B"].map((u)=>(
-                <button key={u} onClick={()=>setSheet(u)} style={{ background:uColor(u),color:"#fff",border:"none",
-                  borderRadius:16,padding:"18px 16px",fontSize:16,fontWeight:700,cursor:"pointer",
-                  fontFamily:numFont,boxShadow:`0 4px 18px ${uColor(u)}45`,
-                  display:"flex",alignItems:"center",justifyContent:"center",gap:8,transition:"transform 0.1s" }}
+                <button key={u} onClick={()=>setSheet({type:"payment",user:u})}
+                  style={{ background:uColor(u),color:"#fff",border:"none",borderRadius:16,padding:"18px 16px",
+                    fontSize:16,fontWeight:700,cursor:"pointer",fontFamily:numFont,boxShadow:`0 4px 18px ${uColor(u)}45`,
+                    display:"flex",alignItems:"center",justifyContent:"center",gap:8,transition:"transform 0.1s" }}
                   onMouseDown={(e)=>(e.currentTarget.style.transform="scale(0.96)")}
                   onMouseUp={(e)=>(e.currentTarget.style.transform="scale(1)")}
                   onTouchStart={(e)=>(e.currentTarget.style.transform="scale(0.96)")}
@@ -353,53 +393,59 @@ export default function App() {
                 </button>
               ))}
             </div>
-          )}
 
-          {curMode==="debt" && (
-            <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:24 }}>
-              <button onClick={()=>setSheet("borrow")} style={{ background:CBORROW,color:"#fff",border:"none",
-                borderRadius:16,padding:"18px 16px",fontSize:15,fontWeight:700,cursor:"pointer",
-                fontFamily:numFont,boxShadow:`0 4px 18px ${CBORROW}45`,
-                display:"flex",alignItems:"center",justifyContent:"center",gap:8,transition:"transform 0.1s" }}
-                onMouseDown={(e)=>(e.currentTarget.style.transform="scale(0.96)")}
-                onMouseUp={(e)=>(e.currentTarget.style.transform="scale(1)")}
-                onTouchStart={(e)=>(e.currentTarget.style.transform="scale(0.96)")}
-                onTouchEnd={(e)=>(e.currentTarget.style.transform="scale(1)")}>
-                <span style={{ fontSize:20,lineHeight:1 }}>💸</span>{names.A}が借りる
-              </button>
-              <button onClick={()=>setSheet("repay")} style={{ background:CREPAY,color:"#fff",border:"none",
-                borderRadius:16,padding:"18px 16px",fontSize:15,fontWeight:700,cursor:"pointer",
-                fontFamily:numFont,boxShadow:`0 4px 18px ${CREPAY}45`,
-                display:"flex",alignItems:"center",justifyContent:"center",gap:8,transition:"transform 0.1s" }}
-                onMouseDown={(e)=>(e.currentTarget.style.transform="scale(0.96)")}
-                onMouseUp={(e)=>(e.currentTarget.style.transform="scale(1)")}
-                onTouchStart={(e)=>(e.currentTarget.style.transform="scale(0.96)")}
-                onTouchEnd={(e)=>(e.currentTarget.style.transform="scale(1)")}>
-                <span style={{ fontSize:20,lineHeight:1 }}>✅</span>返した
+            {allCur.length>0 ? (
+              <>
+                <div style={{ fontSize:11,color:"#AAA",marginBottom:8,fontWeight:600,paddingLeft:4,letterSpacing:"0.5px" }}>最近の履歴</div>
+                {allCur.slice(0,4).map((e)=>(
+                  <EntryRow key={e.id} entry={e} names={names} onDelete={requestDelete}
+                    isCompleted={completedBorrowIds.has(e.id)}/>
+                ))}
+                {allCur.length>4&&(
+                  <button onClick={()=>setTab("history")} style={{ width:"100%",padding:12,background:"none",
+                    border:"1.5px dashed #DDD",borderRadius:12,color:"#888",
+                    fontSize:13,cursor:"pointer",fontFamily:font,marginTop:4 }}>
+                    全ての履歴を見る（{allCur.length} 件）
+                  </button>
+                )}
+              </>
+            ) : (
+              <div style={{ background:"#fff",borderRadius:16,padding:"40px 24px",textAlign:"center",boxShadow:"0 1px 8px rgba(0,0,0,0.04)" }}>
+                <div style={{ fontSize:36,marginBottom:12 }}>📝</div>
+                <div style={{ fontSize:14,color:"#888" }}>まだ記録がありません</div>
+                <div style={{ fontSize:12,color:"#bbb",marginTop:4 }}>上のボタンから追加してね</div>
+              </div>
+            )}
+          </>)}
+
+          {/* ── 借りモード ── */}
+          {curMode==="debt" && (<>
+            <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12 }}>
+              <div style={{ fontSize:11,color:"#AAA",fontWeight:600,letterSpacing:"0.5px" }}>
+                返済中 {activeBorrows.length}件
+              </div>
+              <button onClick={()=>setSheet({type:"borrow"})}
+                style={{ background:CBORROW,color:"#fff",border:"none",borderRadius:12,
+                  padding:"9px 18px",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:font,
+                  boxShadow:`0 3px 12px ${CBORROW}40`,display:"flex",alignItems:"center",gap:6 }}>
+                <span style={{ fontSize:18,lineHeight:1 }}>💸</span> 借りる
               </button>
             </div>
-          )}
 
-          {/* Recent */}
-          {allCur.length>0 ? (
-            <>
-              <div style={{ fontSize:11,color:"#AAA",marginBottom:8,fontWeight:600,paddingLeft:4,letterSpacing:"0.5px" }}>最近の履歴</div>
-              {allCur.slice(0,4).map((e)=><EntryRow key={e.id} entry={e} names={names} onDelete={requestDelete}/>)}
-              {allCur.length>4&&(
-                <button onClick={()=>setTab("history")} style={{ width:"100%",padding:12,background:"none",
-                  border:"1.5px dashed #DDD",borderRadius:12,color:"#888",
-                  fontSize:13,cursor:"pointer",fontFamily:font,marginTop:4 }}>
-                  全ての履歴を見る（{allCur.length} 件）
-                </button>
-              )}
-            </>
-          ) : (
-            <div style={{ background:"#fff",borderRadius:16,padding:"40px 24px",textAlign:"center",boxShadow:"0 1px 8px rgba(0,0,0,0.04)" }}>
-              <div style={{ fontSize:36,marginBottom:12 }}>📝</div>
-              <div style={{ fontSize:14,color:"#888" }}>まだ記録がありません</div>
-              <div style={{ fontSize:12,color:"#bbb",marginTop:4 }}>上のボタンから追加してね</div>
-            </div>
-          )}
+            {activeBorrows.length===0 ? (
+              <div style={{ background:"#fff",borderRadius:16,padding:"40px 24px",textAlign:"center",
+                boxShadow:"0 1px 8px rgba(0,0,0,0.04)",marginBottom:16 }}>
+                <div style={{ fontSize:36,marginBottom:12 }}>🎉</div>
+                <div style={{ fontSize:16,fontWeight:700,color:"#22C55E" }}>借りなし！</div>
+                <div style={{ fontSize:12,color:"#bbb",marginTop:4 }}>現在、借りている記録はありません</div>
+              </div>
+            ) : (
+              activeBorrows.map((b)=>(
+                <BorrowCard key={b.id} borrow={b} names={names} onRepay={openRepay} onDelete={requestDelete}/>
+              ))
+            )}
+          </>)}
+
         </div>
       )}
 
@@ -410,7 +456,10 @@ export default function App() {
             ? <div style={{ textAlign:"center",color:"#bbb",padding:"80px 0",fontSize:14 }}>まだ記録がありません</div>
             : <>
                 <div style={{ fontSize:11,color:"#AAA",marginBottom:10,fontWeight:600,paddingLeft:4,letterSpacing:"0.5px" }}>{allCur.length} 件の記録</div>
-                {allCur.map((e)=><EntryRow key={e.id} entry={e} names={names} onDelete={requestDelete}/>)}
+                {allCur.map((e)=>(
+                  <EntryRow key={e.id} entry={e} names={names} onDelete={requestDelete}
+                    isCompleted={completedBorrowIds.has(e.id)}/>
+                ))}
               </>
           }
         </div>
@@ -419,7 +468,6 @@ export default function App() {
       {/* Settings */}
       {tab==="books" && (
         <div style={{ padding:"16px" }}>
-          {/* User names */}
           <div style={{ fontSize:11,color:"#AAA",marginBottom:8,fontWeight:600,paddingLeft:4,letterSpacing:"0.5px" }}>ユーザー名</div>
           <div style={{ background:"#fff",borderRadius:16,padding:"18px 16px",marginBottom:16,boxShadow:"0 1px 6px rgba(0,0,0,0.05)" }}>
             {editNames ? (
@@ -459,7 +507,6 @@ export default function App() {
             )}
           </div>
 
-          {/* Pages */}
           <div style={{ fontSize:11,color:"#AAA",marginBottom:8,fontWeight:600,paddingLeft:4,letterSpacing:"0.5px" }}>ページ一覧</div>
           {books.map((b)=>(
             <div key={b.id} style={{ background:"#fff",borderRadius:12,padding:"14px 16px",marginBottom:8,
@@ -480,8 +527,6 @@ export default function App() {
                 color:books.length<=1?"#E0DDD8":"#FF5133",fontSize:17,cursor:books.length<=1?"default":"pointer",padding:8 }}>⌫</button>
             </div>
           ))}
-
-          {/* New book */}
           <div style={{ background:"#fff",borderRadius:16,padding:"18px 16px",marginTop:8,boxShadow:"0 1px 6px rgba(0,0,0,0.05)" }}>
             <div style={{ fontSize:11,color:"#AAA",marginBottom:10,fontWeight:600,letterSpacing:"0.5px" }}>新しいページを追加</div>
             <div style={{ display:"flex",gap:8,marginBottom:10 }}>
@@ -518,23 +563,47 @@ export default function App() {
         ))}
       </div>
 
-      {/* Add Drawer */}
+      {/* Add / Repay / Borrow Drawer */}
       {sheet && (
         <>
-          <div onClick={()=>{setSheet(null);setAmount("");setMemo("");}}
+          <div onClick={closeSheet}
             style={{ position:"fixed",inset:0,background:"rgba(0,0,0,0.45)",zIndex:100 }}/>
           <div style={{ position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",
             width:"100%",maxWidth:430,background:"#fff",borderRadius:"24px 24px 0 0",
             padding:"8px 24px 32px",zIndex:101,boxShadow:"0 -8px 40px rgba(0,0,0,0.15)",boxSizing:"border-box" }}>
-            <div style={{ width:36,height:4,background:"#E0DDD8",borderRadius:2,margin:"12px auto 24px" }}/>
-            <div style={{ display:"flex",alignItems:"center",gap:10,marginBottom:22 }}>
-              <div style={{ width:34,height:34,borderRadius:10,background:sheetColor,
-                display:"flex",alignItems:"center",justifyContent:"center",
-                fontSize:sheetIsEmoji?18:14,fontWeight:700,color:"#fff",fontFamily:numFont }}>
-                {sheetIcon}
+            <div style={{ width:36,height:4,background:"#E0DDD8",borderRadius:2,margin:"12px auto 20px" }}/>
+            <div style={{ fontSize:17,fontWeight:700,color:"#1A1A1A",marginBottom:16 }}>{sheetTitle}</div>
+
+            {/* 借りる: 借りた人選択 */}
+            {sheet.type==="borrow" && (
+              <div style={{ marginBottom:16 }}>
+                <div style={{ fontSize:11,color:"#AAA",marginBottom:8,fontWeight:600,letterSpacing:"0.5px" }}>借りた人</div>
+                <div style={{ display:"flex",gap:8 }}>
+                  {["A","B"].map((u)=>(
+                    <button key={u} onClick={()=>setBorrower(u)} style={{ flex:1,padding:"10px",border:"2px solid",
+                      borderColor:borrower===u?CBORROW:"#EDE9E2",
+                      borderRadius:12,fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:font,
+                      background:borrower===u?`${CBORROW}12`:"#fff",
+                      color:borrower===u?CBORROW:"#AAA",transition:"all 0.15s" }}>
+                      {names[u]}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div style={{ fontSize:17,fontWeight:700,color:"#1A1A1A" }}>{sheetTitle}</div>
-            </div>
+            )}
+
+            {/* 返済: 対象の借り情報表示 */}
+            {sheet.type==="repay" && (
+              <div style={{ background:"#FFF8F2",border:`1px solid ${CBORROW}30`,borderRadius:12,
+                padding:"10px 14px",marginBottom:16 }}>
+                <div style={{ fontSize:11,color:CBORROW,fontWeight:700,marginBottom:2 }}>返済対象</div>
+                <div style={{ fontSize:14,fontWeight:700,color:"#1A1A1A" }}>
+                  {names[sheet.borrow.borrower]} · 残り {fmt(sheet.borrow.remaining)}
+                </div>
+                {sheet.borrow.memo && <div style={{ fontSize:11,color:"#AAA",marginTop:2 }}>{sheet.borrow.memo}</div>}
+              </div>
+            )}
+
             <div style={{ marginBottom:14 }}>
               <div style={{ fontSize:11,color:"#AAA",marginBottom:6,fontWeight:600,letterSpacing:"0.5px" }}>金額 *</div>
               <div style={{ position:"relative" }}>
@@ -579,7 +648,7 @@ export default function App() {
               現在の状況をリセットします。<br/>
               <span style={{ fontWeight:700,color:"#1A1A1A" }}>履歴は消えません。</span><br/>
               {curMode==="debt"
-                ? `リセット時点の状況（残り ${fmt(debt)}）が履歴に残ります。`
+                ? `返済中 ${activeBorrows.length}件 の状況が履歴に残ります。`
                 : `リセット時点の状況（${names.A} ${fmt(totA)} / ${names.B} ${fmt(totB)}）が履歴に残ります。`}
             </div>
             <div style={{ display:"flex",gap:10 }}>
@@ -604,22 +673,17 @@ export default function App() {
             <div style={{ width:36,height:4,background:"#E0DDD8",borderRadius:2,margin:"12px auto 24px" }}/>
             <div style={{ fontSize:18,fontWeight:700,color:"#1A1A1A",marginBottom:10 }}>🗑️ 記録を削除</div>
             {confirmDelete.type==="reset" ? (
-              <div style={{ background:"#FFF8F0",border:"1px solid #FFE0C8",borderRadius:12,
-                padding:"12px 14px",marginBottom:20 }}>
+              <div style={{ background:"#FFF8F0",border:"1px solid #FFE0C8",borderRadius:12,padding:"12px 14px",marginBottom:20 }}>
                 <div style={{ fontSize:13,fontWeight:700,color:"#C05000" }}>リセット履歴</div>
-                <div style={{ fontSize:12,color:"#C08060",marginTop:4 }}>
-                  {fmtDate(confirmDelete.date)} · {confirmDelete.snapshot?.debt !== undefined
-                    ? `残り ${fmt(confirmDelete.snapshot.debt)}`
-                    : `${names.A} ${fmt(confirmDelete.snapshot?.totA??0)} / ${names.B} ${fmt(confirmDelete.snapshot?.totB??0)}`}
-                </div>
+                <div style={{ fontSize:12,color:"#C08060",marginTop:4 }}>{fmtDate(confirmDelete.date)}</div>
               </div>
             ) : (
               <div style={{ background:"#F5F3EE",borderRadius:12,padding:"12px 14px",marginBottom:20 }}>
                 <div style={{ fontSize:22,fontWeight:700,color:"#1A1A1A",letterSpacing:"-0.5px" }}>{fmt(confirmDelete.amount)}</div>
                 <div style={{ fontSize:12,color:"#999",marginTop:4 }}>
                   {fmtDate(confirmDelete.date)} ·{" "}
-                  {confirmDelete.type==="borrow" ? `${names.A}が借りる`
-                   : confirmDelete.type==="repay" ? "返済"
+                  {confirmDelete.type==="borrow" ? `${names[confirmDelete.borrower]||confirmDelete.borrower}が借りる`
+                   : confirmDelete.type==="repayment" ? "返済"
                    : names[confirmDelete.user]||confirmDelete.user}
                   {confirmDelete.memo ? ` · ${confirmDelete.memo}` : ""}
                 </div>
