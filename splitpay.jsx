@@ -313,8 +313,8 @@ export default function App() {
                       fontSize:12,fontWeight:700,color:"#fff",flexShrink:0,fontFamily:numFont }}>{u}</div>
                     <input value={editNames[u]} onChange={(e)=>setEditNames((n)=>({...n,[u]:e.target.value}))}
                       maxLength={12} placeholder={u==="A"?"例: たろう":"例: はなこ"}
-                      style={{ flex:1,border:"1.5px solid #EDE9E2",borderRadius:10,
-                        padding:"9px 12px",fontSize:16,fontFamily:font,outline:"none",background:BG,color:"#1A1A1A" }}/>
+                      style={{ flex:1,minWidth:0,border:"1.5px solid #EDE9E2",borderRadius:10,
+                        padding:"8px 10px",fontSize:16,fontFamily:font,outline:"none",background:BG,color:"#1A1A1A",boxSizing:"border-box" }}/>
                   </div>
                 ))}
                 <div style={{ display:"flex",gap:8,marginTop:14 }}>
@@ -360,10 +360,10 @@ export default function App() {
             <div style={{ display:"flex",gap:8 }}>
               <input value={newBookName} onChange={(e)=>setNewBookName(e.target.value)}
                 onKeyDown={(e)=>e.key==="Enter"&&handleAddBook()} placeholder="例: 旅行費、外食..."
-                style={{ flex:1,border:"1.5px solid #EDE9E2",borderRadius:10,
-                  padding:"11px 12px",fontSize:16,fontFamily:font,outline:"none",background:BG,color:"#1A1A1A" }}/>
-              <button onClick={handleAddBook} style={{ background:"#1A1A1A",color:"#fff",border:"none",
-                borderRadius:10,padding:"11px 16px",fontSize:14,cursor:"pointer",fontFamily:font,fontWeight:700 }}>追加</button>
+                style={{ flex:1,minWidth:0,border:"1.5px solid #EDE9E2",borderRadius:10,
+                  padding:"8px 10px",fontSize:16,fontFamily:font,outline:"none",background:BG,color:"#1A1A1A",boxSizing:"border-box" }}/>
+              <button onClick={handleAddBook} style={{ background:"#1A1A1A",color:"#fff",border:"none",flexShrink:0,
+                borderRadius:10,padding:"8px 14px",fontSize:14,cursor:"pointer",fontFamily:font,fontWeight:700 }}>追加</button>
             </div>
           </div>
         </div>
