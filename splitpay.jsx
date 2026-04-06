@@ -131,7 +131,7 @@ function BorrowCard({ borrow, names, onRepay, onDelete }) {
               {(names[borrow.borrower]||borrow.borrower)[0]?.toUpperCase()}
             </div>
             <div style={{ fontSize:14, fontWeight:700, color:"#1A1A1A" }}>
-              {names[borrow.borrower]} が借りる
+              {names[borrow.borrower]} が借りた
             </div>
           </div>
           {borrow.memo && <div style={{ fontSize:11, color:"#AAA", paddingLeft:34 }}>{borrow.memo}</div>}
