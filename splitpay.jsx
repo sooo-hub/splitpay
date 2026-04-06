@@ -174,6 +174,7 @@ export default function App() {
   const [books,   setBooks]   = useState([{ id:"b1", name:"日常費", mode:"split" }]);
   const [entries, setEntries] = useState([]);
   const [names,   setNames]   = useState({ A:"A", B:"B" });
+  const [memos,   setMemos]   = useState([]);
   const [bookId,  setBookId]  = useState("b1");
   const [tab,     setTab]     = useState("home");
   const [loading, setLoading] = useState(true);
@@ -192,6 +193,10 @@ export default function App() {
   const [showReset,     setShowReset]     = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null);
 
+  const [newMemoText,  setNewMemoText]  = useState("");
+  const [editMemo,     setEditMemo]     = useState(null); // {id, text}
+  const [memoSubmitting, setMemoSubmitting] = useState(false);
+
   const loadData = useCallback(() => setLastSync(new Date()), []);
 
   useEffect(() => {
@@ -205,6 +210,7 @@ export default function App() {
         }
         if (data.entries) setEntries(data.entries);
         if (data.names)   setNames(data.names);
+        if (data.memos)   setMemos(data.memos);
       }
       setLastSync(new Date());
       setLoading(false);
@@ -215,6 +221,7 @@ export default function App() {
   const saveBooks   = async (bs) => { setBooks(bs);   try { await setDoc(DOC_REF, { books:   bs }, { merge: true }); } catch {} };
   const saveEntries = async (es) => { setEntries(es); try { await setDoc(DOC_REF, { entries: es }, { merge: true }); } catch {} };
   const saveNames   = async (ns) => { setNames(ns);   try { await setDoc(DOC_REF, { names:   ns }, { merge: true }); } catch {} };
+  const saveMemos   = async (ms) => { setMemos(ms);   try { await setDoc(DOC_REF, { memos:   ms }, { merge: true }); } catch {} };
 
   const allCur    = entries.filter((e)=>e.bookId===bookId).sort((a,b)=>new Date(b.date)-new Date(a.date));
   const chronoCur = [...allCur].reverse();
@@ -312,6 +319,25 @@ export default function App() {
     if (!editNames) return;
     await saveNames({ A:editNames.A.trim()||"A", B:editNames.B.trim()||"B" });
     setEditNames(null);
+  };
+
+  const handleAddMemo = async () => {
+    if (!newMemoText.trim()) return;
+    setMemoSubmitting(true);
+    try {
+      await saveMemos([{ id:genId(), text:newMemoText.trim(), date:new Date().toISOString() }, ...memos]);
+      setNewMemoText("");
+    } finally { setMemoSubmitting(false); }
+  };
+
+  const handleSaveEditMemo = async () => {
+    if (!editMemo||!editMemo.text.trim()) return;
+    await saveMemos(memos.map((m)=>m.id===editMemo.id ? { ...m, text:editMemo.text.trim() } : m));
+    setEditMemo(null);
+  };
+
+  const handleDeleteMemo = async (id) => {
+    await saveMemos(memos.filter((m)=>m.id!==id));
   };
 
   const font    = "'Noto Sans JP','Sora',sans-serif";
@@ -470,6 +496,69 @@ export default function App() {
         </div>
       )}
 
+      {/* Memo */}
+      {tab==="memo" && (
+        <div style={{ padding:"16px" }}>
+          {/* 入力エリア */}
+          <div style={{ background:"#fff",borderRadius:16,padding:"16px",marginBottom:16,boxShadow:"0 1px 6px rgba(0,0,0,0.05)" }}>
+            <textarea value={newMemoText} onChange={(e)=>setNewMemoText(e.target.value)}
+              placeholder="メモを入力…"
+              rows={3}
+              style={{ width:"100%",border:"1.5px solid #EDE9E2",borderRadius:12,
+                padding:"10px 12px",fontSize:15,fontFamily:font,outline:"none",
+                background:BG,color:"#1A1A1A",boxSizing:"border-box",resize:"none",lineHeight:1.6 }}/>
+            <button onClick={handleAddMemo} disabled={!newMemoText.trim()||memoSubmitting}
+              style={{ marginTop:10,width:"100%",padding:"11px",background:!newMemoText.trim()?"#E0DDD8":"#1A1A1A",
+                color:"#fff",border:"none",borderRadius:12,fontSize:14,fontWeight:700,
+                cursor:!newMemoText.trim()?"default":"pointer",fontFamily:font }}>
+              {memoSubmitting?"保存中…":"＋ 追加"}
+            </button>
+          </div>
+
+          {/* メモ一覧 */}
+          {memos.length===0 ? (
+            <div style={{ textAlign:"center",color:"#bbb",padding:"60px 0",fontSize:14 }}>
+              <div style={{ fontSize:36,marginBottom:12 }}>📝</div>
+              まだメモがありません
+            </div>
+          ) : (
+            memos.map((m)=>(
+              <div key={m.id} style={{ background:"#fff",borderRadius:14,padding:"14px 16px",
+                marginBottom:10,boxShadow:"0 1px 6px rgba(0,0,0,0.05)" }}>
+                {editMemo?.id===m.id ? (
+                  <>
+                    <textarea value={editMemo.text} onChange={(e)=>setEditMemo((v)=>({...v,text:e.target.value}))}
+                      rows={3} autoFocus
+                      style={{ width:"100%",border:"1.5px solid #1A1A1A",borderRadius:10,
+                        padding:"8px 10px",fontSize:15,fontFamily:font,outline:"none",
+                        background:BG,color:"#1A1A1A",boxSizing:"border-box",resize:"none",lineHeight:1.6 }}/>
+                    <div style={{ display:"flex",gap:8,marginTop:10 }}>
+                      <button onClick={()=>setEditMemo(null)} style={{ flex:1,padding:"9px",background:"#F5F3EE",
+                        border:"none",borderRadius:10,fontSize:13,cursor:"pointer",fontFamily:font,color:"#888" }}>キャンセル</button>
+                      <button onClick={handleSaveEditMemo} style={{ flex:1,padding:"9px",background:"#1A1A1A",
+                        border:"none",borderRadius:10,fontSize:13,cursor:"pointer",fontFamily:font,color:"#fff",fontWeight:700 }}>保存</button>
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ display:"flex",alignItems:"flex-start",gap:10 }}>
+                    <div style={{ flex:1,minWidth:0 }}>
+                      <div style={{ fontSize:15,color:"#1A1A1A",lineHeight:1.6,whiteSpace:"pre-wrap",wordBreak:"break-word" }}>{m.text}</div>
+                      <div style={{ fontSize:11,color:"#bbb",marginTop:6 }}>{fmtDate(m.date)}</div>
+                    </div>
+                    <div style={{ display:"flex",flexDirection:"column",gap:4,flexShrink:0 }}>
+                      <button onClick={()=>setEditMemo({id:m.id,text:m.text})} style={{ background:"none",border:"none",
+                        color:"#ccc",fontSize:15,cursor:"pointer",padding:"2px 4px",lineHeight:1 }}>✏️</button>
+                      <button onClick={()=>handleDeleteMemo(m.id)} style={{ background:"none",border:"none",
+                        color:"#ccc",fontSize:15,cursor:"pointer",padding:"2px 4px",lineHeight:1 }}>✕</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
       {/* Settings */}
       {tab==="books" && (
         <div style={{ padding:"16px" }}>
@@ -559,7 +648,7 @@ export default function App() {
       <div style={{ position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",
         width:"100%",maxWidth:430,background:"#fff",borderTop:"1px solid #EDE9E2",
         display:"flex",paddingBottom:8,zIndex:50 }}>
-        {[["home","🏠","ホーム"],["history","📋","履歴"],["books","⚙️","設定"]].map(([t,icon,label])=>(
+        {[["home","🏠","ホーム"],["history","📋","履歴"],["memo","📝","メモ"],["books","⚙️","設定"]].map(([t,icon,label])=>(
           <button key={t} onClick={()=>setTab(t)} style={{ flex:1,background:"none",border:"none",
             padding:"10px 0 4px",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:3 }}>
             <span style={{ fontSize:22,opacity:tab===t?1:0.35 }}>{icon}</span>
