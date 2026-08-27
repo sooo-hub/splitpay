@@ -22,6 +22,11 @@ struct SplitpayApp: App {
             ContentView()
                 .environmentObject(authService)
                 .environmentObject(store)
+                // Theme.swiftの配色はWeb版に合わせた固定色でダークモードの色分岐を
+                // 持っていない(例: メモ欄はTheme.background固定+システムのprimaryテキスト色
+                // という組み合わせのため、ダークモードだと白文字×明るい背景で読めなくなる)。
+                // 個別に配色を作り込むのではなく、アプリ全体をライトモード固定にして解決する。
+                .preferredColorScheme(.light)
                 .onAppear {
                     authService.start()
                     // 匿名認証が完了する前にFirestoreの購読を始めると、
