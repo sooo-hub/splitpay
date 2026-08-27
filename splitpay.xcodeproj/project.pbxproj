@@ -55,7 +55,7 @@
 		92E03D8EB78D414C7EE3980F /* ResetSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetSheetView.swift; sourceTree = "<group>"; };
 		9AB7911EB2D0DD2E566116A4 /* splitpayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = splitpayApp.swift; sourceTree = "<group>"; };
 		9EE5760761FDA5428F8A0DE8 /* EntrySheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntrySheetView.swift; sourceTree = "<group>"; };
-		A97BD120304DE6DEB528667C /* splitpay.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = splitpay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A97BD120304DE6DEB528667C /* splitpay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = splitpay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB54F64B431CBDFD6B875771 /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
 		C09584F3E9625B99D31C38FD /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
 		C9B1BFC1A079345BB4E7E495 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -208,8 +208,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = F9F26C1D2E9476B43273A222 /* Build configuration list for PBXProject "splitpay" */;
 			developmentRegion = en;
@@ -286,6 +284,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B2PN4MKG33;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = splitpay/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -365,6 +364,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B2PN4MKG33;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = splitpay/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;

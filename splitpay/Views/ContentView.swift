@@ -106,7 +106,7 @@ struct ContentView: View {
                     activeSheet = nil
                 }
             )
-            .presentationDetents([.medium, .large])
+            .presentationDetents([.large])
             .presentationDragIndicator(.hidden)
         }
         .sheet(isPresented: $showReset) {

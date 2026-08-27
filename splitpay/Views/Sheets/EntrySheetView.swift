@@ -12,12 +12,27 @@ struct EntrySheetView: View {
     @State private var amountText = ""
     @State private var memo = ""
     @State private var isSubmitting = false
-    @FocusState private var amountFocused: Bool
-    @FocusState private var memoFocused: Bool
     @AppStorage(EntryInputOrder.storageKey) private var inputOrderRaw = EntryInputOrder.amountFirst.rawValue
+
+    private enum Field: Hashable {
+        case amount, memo
+    }
+    @FocusState private var focusedField: Field?
 
     private var isMemoFirst: Bool {
         inputOrderRaw == EntryInputOrder.memoFirst.rawValue
+    }
+
+    /// キーボードの「＜ ＞」で辿る順序。表示順(記録の入力順設定)と一致させる
+    private var fieldOrder: [Field] {
+        isMemoFirst ? [.memo, .amount] : [.amount, .memo]
+    }
+
+    private func moveFocus(by offset: Int) {
+        guard let current = focusedField, let idx = fieldOrder.firstIndex(of: current) else { return }
+        let newIdx = idx + offset
+        guard fieldOrder.indices.contains(newIdx) else { return }
+        focusedField = fieldOrder[newIdx]
     }
 
     private var color: Color {
@@ -75,15 +90,35 @@ struct EntrySheetView: View {
             .padding(24)
         }
         .background(Color.white)
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Button {
+                    moveFocus(by: -1)
+                } label: {
+                    Image(systemName: "chevron.left")
+                }
+                .disabled(focusedField == fieldOrder.first)
+
+                Button {
+                    moveFocus(by: 1)
+                } label: {
+                    Image(systemName: "chevron.right")
+                }
+                .disabled(focusedField == fieldOrder.last)
+
+                Spacer()
+
+                Button("完了") {
+                    focusedField = nil
+                }
+                .font(.system(size: 15, weight: .semibold))
+            }
+        }
         .onAppear {
             if case .repay(let borrow) = sheet {
                 amountText = String(Int(borrow.remaining))
             }
-            if isMemoFirst {
-                memoFocused = true
-            } else {
-                amountFocused = true
-            }
+            focusedField = fieldOrder.first
         }
     }
 
@@ -146,7 +181,7 @@ struct EntrySheetView: View {
                     .keyboardType(.numberPad)
                     .font(.system(size: 32, weight: .bold))
                     .foregroundStyle(Theme.textPrimary)
-                    .focused($amountFocused)
+                    .focused($focusedField, equals: .amount)
                     .onChange(of: amountText) { _, newValue in
                         amountText = newValue.filter { $0.isNumber }
                     }
@@ -166,7 +201,11 @@ struct EntrySheetView: View {
                 .padding(12)
                 .background(Theme.background, in: RoundedRectangle(cornerRadius: 12))
                 .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(Theme.border, lineWidth: 1.5))
-                .focused($memoFocused)
+                .focused($focusedField, equals: .memo)
+                .submitLabel(.done)
+                .onSubmit {
+                    focusedField = nil
+                }
         }
     }
 
