@@ -28,6 +28,9 @@ struct BottomNavView: View {
                 .overlay(alignment: .top) {
                     Rectangle().fill(Theme.border).frame(height: 1)
                 }
+                // アイコン/ラベルはセーフエリアの上に収まるが、白背景は画面最下端
+                // (ホームインジケーター部分)まで隙間なく塗るために伸ばす
+                .ignoresSafeArea(edges: .bottom)
         )
     }
 }

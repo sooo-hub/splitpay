@@ -6,6 +6,7 @@ struct EntryRowView: View {
     let names: UserNames
     let isCompleted: Bool
     let onDelete: () -> Void
+    let onEdit: () -> Void
 
     var body: some View {
         switch entry.type {
@@ -92,6 +93,8 @@ struct EntryRowView: View {
         .padding(.vertical, 12)
         .background(Color.white, in: RoundedRectangle(cornerRadius: 12))
         .shadow(color: .black.opacity(0.05), radius: 6, y: 1)
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onEdit)
     }
 
     private var borrowSubtitle: String {
@@ -119,6 +122,8 @@ struct EntryRowView: View {
         .padding(.vertical, 12)
         .background(Color.white, in: RoundedRectangle(cornerRadius: 12))
         .shadow(color: .black.opacity(0.05), radius: 6, y: 1)
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onEdit)
     }
 
     // MARK: - payment
@@ -148,6 +153,8 @@ struct EntryRowView: View {
         .padding(.vertical, 12)
         .background(Color.white, in: RoundedRectangle(cornerRadius: 12))
         .shadow(color: .black.opacity(0.05), radius: 6, y: 1)
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onEdit)
     }
 
     // MARK: - shared pieces

@@ -48,11 +48,23 @@ struct EntrySheetView: View {
         }
     }
 
+    private var isEditing: Bool {
+        if case .edit = sheet { return true }
+        return false
+    }
+
     private var color: Color {
         switch sheet {
         case .payment(let user): return Theme.userColor(user)
         case .borrow: return Theme.colorBorrow
         case .repay: return Theme.colorRepay
+        case .edit(let entry):
+            switch entry.type {
+            case .payment: return Theme.userColor(entry.user ?? "A")
+            case .borrow: return Theme.colorBorrow
+            case .repayment, .repay: return Theme.colorRepay
+            case .reset: return Theme.textMuted
+            }
         }
     }
 
@@ -61,6 +73,7 @@ struct EntrySheetView: View {
         case .payment(let user): return "\(names[user]) の支払いを記録"
         case .borrow: return "借りる記録"
         case .repay: return "返済を記録"
+        case .edit: return "記録を編集"
         }
     }
 
@@ -132,6 +145,13 @@ struct EntrySheetView: View {
         .onAppear {
             if case .repay(let borrow) = sheet {
                 amountText = String(Int(borrow.remaining))
+            }
+            if case .edit(let entry) = sheet {
+                if let amount = entry.amount {
+                    amountText = String(Int(amount))
+                }
+                memo = entry.memo ?? ""
+                borrower = entry.borrower ?? "A"
             }
             focusedField = fieldOrder.first
         }
@@ -227,7 +247,7 @@ struct EntrySheetView: View {
     private var submitButton: some View {
         let enabled = amountValue != nil && (amountValue ?? 0) > 0 && !isSubmitting
         return Button(action: submit) {
-            Text(isSubmitting ? "記録中…" : "記録する ✓")
+            Text(isSubmitting ? "記録中…" : (isEditing ? "更新する ✓" : "記録する ✓"))
                 .font(.system(size: 16, weight: .bold))
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
@@ -242,19 +262,23 @@ struct EntrySheetView: View {
     private func submit() {
         guard let n = amountValue, n > 0 else { return }
         isSubmitting = true
-        let now = Formatting.nowISOString()
         let trimmedMemo = memo.trimmingCharacters(in: .whitespacesAndNewlines)
         let entry: Entry
         switch sheet {
         case .payment(let user):
             entry = Entry(id: Formatting.generateId(), bookId: bookId, type: .payment, user: user,
-                           amount: Double(n), memo: trimmedMemo, date: now)
+                           amount: Double(n), memo: trimmedMemo, date: Formatting.nowISOString())
         case .borrow:
             entry = Entry(id: Formatting.generateId(), bookId: bookId, type: .borrow, borrower: borrower,
-                           amount: Double(n), memo: trimmedMemo, date: now)
+                           amount: Double(n), memo: trimmedMemo, date: Formatting.nowISOString())
         case .repay(let borrow):
             entry = Entry(id: Formatting.generateId(), bookId: bookId, type: .repayment, borrowId: borrow.id,
-                           amount: Double(n), memo: trimmedMemo, date: now)
+                           amount: Double(n), memo: trimmedMemo, date: Formatting.nowISOString())
+        case .edit(let original):
+            // id/日付/種別/当事者情報は元のまま、金額とメモだけを差し替える
+            entry = Entry(id: original.id, bookId: original.bookId, type: original.type,
+                           user: original.user, borrower: original.borrower, borrowId: original.borrowId,
+                           amount: Double(n), memo: trimmedMemo, date: original.date, snapshot: original.snapshot)
         }
         onSubmit(entry)
         isSubmitting = false

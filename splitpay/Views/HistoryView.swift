@@ -5,6 +5,7 @@ struct HistoryView: View {
     let names: UserNames
     let completedBorrowIds: Set<String>
     let onDelete: (Entry) -> Void
+    let onEdit: (Entry) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -25,7 +26,8 @@ struct HistoryView: View {
                         entry: entry,
                         names: names,
                         isCompleted: completedBorrowIds.contains(entry.id),
-                        onDelete: { onDelete(entry) }
+                        onDelete: { onDelete(entry) },
+                        onEdit: { onEdit(entry) }
                     )
                     .padding(.bottom, 8)
                 }

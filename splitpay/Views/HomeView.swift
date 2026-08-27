@@ -8,6 +8,7 @@ struct HomeView: View {
     let onOpenBorrow: () -> Void
     let onOpenRepay: (BorrowWithProgress) -> Void
     let onDelete: (Entry) -> Void
+    let onEdit: (Entry) -> Void
     let onShowReset: () -> Void
     let onShowAllHistory: () -> Void
 
@@ -61,7 +62,8 @@ struct HomeView: View {
                         entry: entry,
                         names: names,
                         isCompleted: computed.completedBorrowIds.contains(entry.id),
-                        onDelete: { onDelete(entry) }
+                        onDelete: { onDelete(entry) },
+                        onEdit: { onEdit(entry) }
                     )
                     .padding(.bottom, 8)
                 }

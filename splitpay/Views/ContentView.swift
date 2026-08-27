@@ -27,17 +27,19 @@ enum AppTab: String, CaseIterable {
     }
 }
 
-/// 金額入力ドロワー(支払い/借りる/返済)の対象
+/// 金額入力ドロワー(支払い/借りる/返済/既存記録の編集)の対象
 enum ActiveEntrySheet: Identifiable, Equatable {
     case payment(user: String)
     case borrow
     case repay(BorrowWithProgress)
+    case edit(Entry)
 
     var id: String {
         switch self {
         case .payment(let user): return "payment-\(user)"
         case .borrow: return "borrow"
         case .repay(let b): return "repay-\(b.id)"
+        case .edit(let entry): return "edit-\(entry.id)"
         }
     }
 }
@@ -102,7 +104,12 @@ struct ContentView: View {
                 bookId: bookId,
                 names: store.names,
                 onSubmit: { entry in
-                    store.saveEntries([entry] + store.entries)
+                    if store.entries.contains(where: { $0.id == entry.id }) {
+                        // 既存記録の編集: 元の位置のまま内容を差し替える
+                        store.saveEntries(store.entries.map { $0.id == entry.id ? entry : $0 })
+                    } else {
+                        store.saveEntries([entry] + store.entries)
+                    }
                     activeSheet = nil
                 }
             )
@@ -147,6 +154,7 @@ struct ContentView: View {
                 onOpenBorrow: { activeSheet = .borrow },
                 onOpenRepay: { borrow in activeSheet = .repay(borrow) },
                 onDelete: { entry in deleteTarget = entry },
+                onEdit: { entry in activeSheet = .edit(entry) },
                 onShowReset: { showReset = true },
                 onShowAllHistory: { tab = .history }
             )
@@ -155,7 +163,8 @@ struct ContentView: View {
                 entries: computed.allCur,
                 names: store.names,
                 completedBorrowIds: computed.completedBorrowIds,
-                onDelete: { entry in deleteTarget = entry }
+                onDelete: { entry in deleteTarget = entry },
+                onEdit: { entry in activeSheet = .edit(entry) }
             )
         case .memo:
             MemoView(store: store)
