@@ -82,38 +82,44 @@ struct EntrySheetView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                Text(title)
-                    .font(.system(size: 17, weight: .bold))
-                    .foregroundStyle(Theme.textPrimary)
-                    .padding(.bottom, 16)
-
-                if case .borrow = sheet {
-                    borrowerPicker
+        GeometryReader { geo in
+            ScrollView {
+                // シートの高さいっぱいにフレームを確保したうえで下寄せにすることで、
+                // シート自体がキーボード回避で大きく広がっても、入力欄・ボタンは
+                // 常にキーボードのすぐ上に来るようにする(上に大きな空白ができるのを防ぐ)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(title)
+                        .font(.system(size: 17, weight: .bold))
+                        .foregroundStyle(Theme.textPrimary)
                         .padding(.bottom, 16)
-                }
 
-                if case .repay(let borrow) = sheet {
-                    repayTargetCard(borrow)
-                        .padding(.bottom, 16)
-                }
+                    if case .borrow = sheet {
+                        borrowerPicker
+                            .padding(.bottom, 16)
+                    }
 
-                if isMemoFirst {
-                    memoField
-                        .padding(.bottom, 14)
-                    amountField
-                        .padding(.bottom, 22)
-                } else {
-                    amountField
-                        .padding(.bottom, 14)
-                    memoField
-                        .padding(.bottom, 22)
-                }
+                    if case .repay(let borrow) = sheet {
+                        repayTargetCard(borrow)
+                            .padding(.bottom, 16)
+                    }
 
-                submitButton
+                    if isMemoFirst {
+                        memoField
+                            .padding(.bottom, 14)
+                        amountField
+                            .padding(.bottom, 22)
+                    } else {
+                        amountField
+                            .padding(.bottom, 14)
+                        memoField
+                            .padding(.bottom, 22)
+                    }
+
+                    submitButton
+                }
+                .padding(24)
+                .frame(minHeight: geo.size.height, alignment: .bottom)
             }
-            .padding(24)
         }
         .background(Color.white)
         .toolbar {
