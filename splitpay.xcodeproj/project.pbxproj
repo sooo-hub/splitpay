@@ -1,0 +1,491 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02A9D5BD39A39D84FFE1C34F /* BottomNavView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442001573E912488D061688 /* BottomNavView.swift */; };
+		06CFFFAC9804BE5B2FC6845E /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB54F64B431CBDFD6B875771 /* Memo.swift */; };
+		10F89DFEF3B7EF121C906FD7 /* BorrowCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F84CE10577C169F89594AF /* BorrowCardView.swift */; };
+		18B15FDD42F7B9B07CBC1721 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA733BBFC73A2D95766FD813 /* Theme.swift */; };
+		2A47446ECBE92F43CAC69FAA /* ResetSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E03D8EB78D414C7EE3980F /* ResetSheetView.swift */; };
+		3B1DFE23C4F1377610B5AE64 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3393359C93984129FB1F5FD7 /* ContentView.swift */; };
+		3CE28A277979B796C8995EC6 /* WarikanCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A8D1B6C25DDEEA50493BEF /* WarikanCalculator.swift */; };
+		4224557BDD03DEB446FDE40D /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = F0A1B244DF534A163D914E09 /* FirebaseFirestore */; };
+		4D9D11728C5C52B69B4866D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0BEF5C30E086E3F11A1743D /* Assets.xcassets */; };
+		527A4FA36E40734E67384E9A /* UserNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77229F4D7782A1816A015B43 /* UserNames.swift */; };
+		58054CB27353A2B83C467AD1 /* MemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7452215C72A517C6C699F189 /* MemoView.swift */; };
+		5A2DA6705758C3E22C261F37 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CFDDA9399A4D2E59AE49E3 /* Book.swift */; };
+		638B53DB84FFF6E4C58C6C81 /* splitpayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB7911EB2D0DD2E566116A4 /* splitpayApp.swift */; };
+		70B5B637FAFAD6E2F337020B /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09584F3E9625B99D31C38FD /* Formatting.swift */; };
+		8EC507A64F9239C86B018B5E /* DeleteConfirmSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69479883B133AF14E48CDB76 /* DeleteConfirmSheetView.swift */; };
+		91DC427E727C06347C42ECD6 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229752BE82C11633ACE37785 /* Entry.swift */; };
+		96DE1C630396EC5B7CB7C9B8 /* EntrySheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE5760761FDA5428F8A0DE8 /* EntrySheetView.swift */; };
+		9B8C44271B6E149597A6702C /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85C63B5C4F011F4DC0AE151 /* HeaderView.swift */; };
+		9FEA23C424B0F0F2C72C766D /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = AB9821E600EBD6EB5D65CCB5 /* FirebaseAuth */; };
+		A7D9520989A320660B1EAFEE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CBB922B62F1D474E4786D8 /* SettingsView.swift */; };
+		AB2B1F6CE134A900A557F3DB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 56742F8D4B405466B210F6D8 /* GoogleService-Info.plist */; };
+		BA7992742DB069A7ABA47931 /* EntryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E86CA33D067997948918E0 /* EntryRowView.swift */; };
+		C23CCB9D5836E6F2F6530A80 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B1BFC1A079345BB4E7E495 /* HomeView.swift */; };
+		C77120A2902C7212301EBE2C /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2167239A4FAE7552BA44C61D /* AuthService.swift */; };
+		C8352701E2F14A52C4F189DD /* FirestoreStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4040386167C819005B199B95 /* FirestoreStore.swift */; };
+		D48B39BDD2D51F0A4E131C7E /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2521D32F184A16E6BDCF97 /* HistoryView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		06A8D1B6C25DDEEA50493BEF /* WarikanCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarikanCalculator.swift; sourceTree = "<group>"; };
+		08CFDDA9399A4D2E59AE49E3 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
+		12E86CA33D067997948918E0 /* EntryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryRowView.swift; sourceTree = "<group>"; };
+		2167239A4FAE7552BA44C61D /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		229752BE82C11633ACE37785 /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
+		2442001573E912488D061688 /* BottomNavView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomNavView.swift; sourceTree = "<group>"; };
+		3393359C93984129FB1F5FD7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		4040386167C819005B199B95 /* FirestoreStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreStore.swift; sourceTree = "<group>"; };
+		56742F8D4B405466B210F6D8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		67F84CE10577C169F89594AF /* BorrowCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorrowCardView.swift; sourceTree = "<group>"; };
+		69479883B133AF14E48CDB76 /* DeleteConfirmSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteConfirmSheetView.swift; sourceTree = "<group>"; };
+		7452215C72A517C6C699F189 /* MemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoView.swift; sourceTree = "<group>"; };
+		76CBB922B62F1D474E4786D8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		77229F4D7782A1816A015B43 /* UserNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNames.swift; sourceTree = "<group>"; };
+		7E2521D32F184A16E6BDCF97 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		92E03D8EB78D414C7EE3980F /* ResetSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetSheetView.swift; sourceTree = "<group>"; };
+		9AB7911EB2D0DD2E566116A4 /* splitpayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = splitpayApp.swift; sourceTree = "<group>"; };
+		9EE5760761FDA5428F8A0DE8 /* EntrySheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntrySheetView.swift; sourceTree = "<group>"; };
+		A97BD120304DE6DEB528667C /* splitpay.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = splitpay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB54F64B431CBDFD6B875771 /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
+		C09584F3E9625B99D31C38FD /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
+		C9B1BFC1A079345BB4E7E495 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		D0BEF5C30E086E3F11A1743D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EA733BBFC73A2D95766FD813 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		F85C63B5C4F011F4DC0AE151 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		FE10C0B1C21067A32E289897 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3A262AAE19A1D085BD686E5D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4224557BDD03DEB446FDE40D /* FirebaseFirestore in Frameworks */,
+				9FEA23C424B0F0F2C72C766D /* FirebaseAuth in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		12705C325BF4B9C8E6622C09 /* splitpay */ = {
+			isa = PBXGroup;
+			children = (
+				D0BEF5C30E086E3F11A1743D /* Assets.xcassets */,
+				56742F8D4B405466B210F6D8 /* GoogleService-Info.plist */,
+				FE10C0B1C21067A32E289897 /* Info.plist */,
+				9AB7911EB2D0DD2E566116A4 /* splitpayApp.swift */,
+				564C21FC0029027F81EA2574 /* Models */,
+				75840119828E65835781E701 /* Services */,
+				DAD039DDE631279E33FAD5D8 /* Utils */,
+				5956AF82EB633F142853EDAD /* Views */,
+			);
+			path = splitpay;
+			sourceTree = "<group>";
+		};
+		2D8ECCDA089AB3713CCB0F5D /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				67F84CE10577C169F89594AF /* BorrowCardView.swift */,
+				2442001573E912488D061688 /* BottomNavView.swift */,
+				12E86CA33D067997948918E0 /* EntryRowView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		564C21FC0029027F81EA2574 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				08CFDDA9399A4D2E59AE49E3 /* Book.swift */,
+				229752BE82C11633ACE37785 /* Entry.swift */,
+				BB54F64B431CBDFD6B875771 /* Memo.swift */,
+				77229F4D7782A1816A015B43 /* UserNames.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		5956AF82EB633F142853EDAD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3393359C93984129FB1F5FD7 /* ContentView.swift */,
+				F85C63B5C4F011F4DC0AE151 /* HeaderView.swift */,
+				7E2521D32F184A16E6BDCF97 /* HistoryView.swift */,
+				C9B1BFC1A079345BB4E7E495 /* HomeView.swift */,
+				7452215C72A517C6C699F189 /* MemoView.swift */,
+				76CBB922B62F1D474E4786D8 /* SettingsView.swift */,
+				2D8ECCDA089AB3713CCB0F5D /* Components */,
+				68F68DFFBF6052EA11B297BE /* Sheets */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5FE546D2EB313FF482A03852 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A97BD120304DE6DEB528667C /* splitpay.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		68F68DFFBF6052EA11B297BE /* Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				69479883B133AF14E48CDB76 /* DeleteConfirmSheetView.swift */,
+				9EE5760761FDA5428F8A0DE8 /* EntrySheetView.swift */,
+				92E03D8EB78D414C7EE3980F /* ResetSheetView.swift */,
+			);
+			path = Sheets;
+			sourceTree = "<group>";
+		};
+		75840119828E65835781E701 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				2167239A4FAE7552BA44C61D /* AuthService.swift */,
+				4040386167C819005B199B95 /* FirestoreStore.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		8E83E1DEFBB22A0CF3854FB2 = {
+			isa = PBXGroup;
+			children = (
+				12705C325BF4B9C8E6622C09 /* splitpay */,
+				5FE546D2EB313FF482A03852 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DAD039DDE631279E33FAD5D8 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				C09584F3E9625B99D31C38FD /* Formatting.swift */,
+				EA733BBFC73A2D95766FD813 /* Theme.swift */,
+				06A8D1B6C25DDEEA50493BEF /* WarikanCalculator.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FCE9A9BA8262CBA6591FCA15 /* splitpay */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1216F1B9A787ABADFAD476B5 /* Build configuration list for PBXNativeTarget "splitpay" */;
+			buildPhases = (
+				65C8F38CB6E88E1D4E18E77B /* Sources */,
+				933AAC413F4D8AA526269556 /* Resources */,
+				3A262AAE19A1D085BD686E5D /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = splitpay;
+			packageProductDependencies = (
+				F0A1B244DF534A163D914E09 /* FirebaseFirestore */,
+				AB9821E600EBD6EB5D65CCB5 /* FirebaseAuth */,
+			);
+			productName = splitpay;
+			productReference = A97BD120304DE6DEB528667C /* splitpay.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		699F48862BEF8C9F5D3880ED /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = F9F26C1D2E9476B43273A222 /* Build configuration list for PBXProject "splitpay" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 8E83E1DEFBB22A0CF3854FB2;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				75E7AEBE9CCFEA6F63A8D3EF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 5FE546D2EB313FF482A03852 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FCE9A9BA8262CBA6591FCA15 /* splitpay */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		933AAC413F4D8AA526269556 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D9D11728C5C52B69B4866D2 /* Assets.xcassets in Resources */,
+				AB2B1F6CE134A900A557F3DB /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		65C8F38CB6E88E1D4E18E77B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C77120A2902C7212301EBE2C /* AuthService.swift in Sources */,
+				5A2DA6705758C3E22C261F37 /* Book.swift in Sources */,
+				10F89DFEF3B7EF121C906FD7 /* BorrowCardView.swift in Sources */,
+				02A9D5BD39A39D84FFE1C34F /* BottomNavView.swift in Sources */,
+				3B1DFE23C4F1377610B5AE64 /* ContentView.swift in Sources */,
+				8EC507A64F9239C86B018B5E /* DeleteConfirmSheetView.swift in Sources */,
+				91DC427E727C06347C42ECD6 /* Entry.swift in Sources */,
+				BA7992742DB069A7ABA47931 /* EntryRowView.swift in Sources */,
+				96DE1C630396EC5B7CB7C9B8 /* EntrySheetView.swift in Sources */,
+				C8352701E2F14A52C4F189DD /* FirestoreStore.swift in Sources */,
+				70B5B637FAFAD6E2F337020B /* Formatting.swift in Sources */,
+				9B8C44271B6E149597A6702C /* HeaderView.swift in Sources */,
+				D48B39BDD2D51F0A4E131C7E /* HistoryView.swift in Sources */,
+				C23CCB9D5836E6F2F6530A80 /* HomeView.swift in Sources */,
+				06CFFFAC9804BE5B2FC6845E /* Memo.swift in Sources */,
+				58054CB27353A2B83C467AD1 /* MemoView.swift in Sources */,
+				2A47446ECBE92F43CAC69FAA /* ResetSheetView.swift in Sources */,
+				A7D9520989A320660B1EAFEE /* SettingsView.swift in Sources */,
+				18B15FDD42F7B9B07CBC1721 /* Theme.swift in Sources */,
+				527A4FA36E40734E67384E9A /* UserNames.swift in Sources */,
+				3CE28A277979B796C8995EC6 /* WarikanCalculator.swift in Sources */,
+				638B53DB84FFF6E4C58C6C81 /* splitpayApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1AEF39A5C8C8B1B4BBF8661E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = splitpay/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sou.splitpay;
+				PRODUCT_NAME = splitpay;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		2F858643903FCD4EE8253221 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		9F6BE5AEE727F7BFF4C92C3D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = splitpay/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sou.splitpay;
+				PRODUCT_NAME = splitpay;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		B84738011C290314092A60DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1216F1B9A787ABADFAD476B5 /* Build configuration list for PBXNativeTarget "splitpay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9F6BE5AEE727F7BFF4C92C3D /* Debug */,
+				1AEF39A5C8C8B1B4BBF8661E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F9F26C1D2E9476B43273A222 /* Build configuration list for PBXProject "splitpay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B84738011C290314092A60DC /* Debug */,
+				2F858643903FCD4EE8253221 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		75E7AEBE9CCFEA6F63A8D3EF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = 12.18.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AB9821E600EBD6EB5D65CCB5 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 75E7AEBE9CCFEA6F63A8D3EF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		F0A1B244DF534A163D914E09 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 75E7AEBE9CCFEA6F63A8D3EF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 699F48862BEF8C9F5D3880ED /* Project object */;
+}

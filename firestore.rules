@@ -1,0 +1,21 @@
+rules_version = '2';
+
+// ⚠️ このルールファイルは「提案」としてリポジトリに追加したものであり、
+// まだ Firebase 本番環境 (warikan-tool) にはデプロイしていません。
+//
+// 理由: Web版 (splitpay.jsx) は現状いっさい認証を行っていないため、
+// この認証必須ルールをそのまま本番へ反映すると、Web版が即座に
+// Firestoreへアクセスできなくなり、実際に稼働中のアプリが壊れます。
+// デプロイする際は、Web版側にも匿名認証(または何らかの認証)を
+// 追加した上で、ユーザー自身の確認・判断のもとで
+// `firebase deploy --only firestore:rules` を実行してください。
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // iOSアプリ(splitpay)は匿名認証(FirebaseAuth)でログイン済みの状態で
+    // warikan/shared ドキュメントを読み書きする。最低限の要件として、
+    // 認証済みユーザーのみ読み書きを許可する。
+    match /warikan/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
