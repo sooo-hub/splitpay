@@ -11,6 +11,7 @@
 		06CFFFAC9804BE5B2FC6845E /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB54F64B431CBDFD6B875771 /* Memo.swift */; };
 		10F89DFEF3B7EF121C906FD7 /* BorrowCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F84CE10577C169F89594AF /* BorrowCardView.swift */; };
 		18B15FDD42F7B9B07CBC1721 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA733BBFC73A2D95766FD813 /* Theme.swift */; };
+		1C6354953B1C25EC32FF0E32 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83FF20D1E94B9F126ED3315 /* AppSettings.swift */; };
 		2A47446ECBE92F43CAC69FAA /* ResetSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E03D8EB78D414C7EE3980F /* ResetSheetView.swift */; };
 		3B1DFE23C4F1377610B5AE64 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3393359C93984129FB1F5FD7 /* ContentView.swift */; };
 		3CE28A277979B796C8995EC6 /* WarikanCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A8D1B6C25DDEEA50493BEF /* WarikanCalculator.swift */; };
@@ -60,6 +61,7 @@
 		C9B1BFC1A079345BB4E7E495 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		D0BEF5C30E086E3F11A1743D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EA733BBFC73A2D95766FD813 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		F83FF20D1E94B9F126ED3315 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		F85C63B5C4F011F4DC0AE151 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		FE10C0B1C21067A32E289897 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -166,6 +168,7 @@
 		DAD039DDE631279E33FAD5D8 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				F83FF20D1E94B9F126ED3315 /* AppSettings.swift */,
 				C09584F3E9625B99D31C38FD /* Formatting.swift */,
 				EA733BBFC73A2D95766FD813 /* Theme.swift */,
 				06A8D1B6C25DDEEA50493BEF /* WarikanCalculator.swift */,
@@ -247,6 +250,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C6354953B1C25EC32FF0E32 /* AppSettings.swift in Sources */,
 				C77120A2902C7212301EBE2C /* AuthService.swift in Sources */,
 				5A2DA6705758C3E22C261F37 /* Book.swift in Sources */,
 				10F89DFEF3B7EF121C906FD7 /* BorrowCardView.swift in Sources */,

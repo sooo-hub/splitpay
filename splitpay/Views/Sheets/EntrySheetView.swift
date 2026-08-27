@@ -13,6 +13,12 @@ struct EntrySheetView: View {
     @State private var memo = ""
     @State private var isSubmitting = false
     @FocusState private var amountFocused: Bool
+    @FocusState private var memoFocused: Bool
+    @AppStorage(EntryInputOrder.storageKey) private var inputOrderRaw = EntryInputOrder.amountFirst.rawValue
+
+    private var isMemoFirst: Bool {
+        inputOrderRaw == EntryInputOrder.memoFirst.rawValue
+    }
 
     private var color: Color {
         switch sheet {
@@ -52,11 +58,17 @@ struct EntrySheetView: View {
                         .padding(.bottom, 16)
                 }
 
-                amountField
-                    .padding(.bottom, 14)
-
-                memoField
-                    .padding(.bottom, 22)
+                if isMemoFirst {
+                    memoField
+                        .padding(.bottom, 14)
+                    amountField
+                        .padding(.bottom, 22)
+                } else {
+                    amountField
+                        .padding(.bottom, 14)
+                    memoField
+                        .padding(.bottom, 22)
+                }
 
                 submitButton
             }
@@ -67,7 +79,11 @@ struct EntrySheetView: View {
             if case .repay(let borrow) = sheet {
                 amountText = String(Int(borrow.remaining))
             }
-            amountFocused = true
+            if isMemoFirst {
+                memoFocused = true
+            } else {
+                amountFocused = true
+            }
         }
     }
 
@@ -150,6 +166,7 @@ struct EntrySheetView: View {
                 .padding(12)
                 .background(Theme.background, in: RoundedRectangle(cornerRadius: 12))
                 .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(Theme.border, lineWidth: 1.5))
+                .focused($memoFocused)
         }
     }
 

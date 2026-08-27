@@ -11,10 +11,16 @@ struct SettingsView: View {
     @State private var newBookName = ""
     @State private var newBookMode: Book.Mode = .split
 
+    @AppStorage(EntryInputOrder.storageKey) private var inputOrderRaw = EntryInputOrder.amountFirst.rawValue
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             sectionLabel("ユーザー名")
             namesCard
+                .padding(.bottom, 16)
+
+            sectionLabel("入力設定")
+            inputOrderCard
                 .padding(.bottom, 16)
 
             sectionLabel("ページ一覧")
@@ -122,6 +128,36 @@ struct SettingsView: View {
         let b = editB.trimmingCharacters(in: .whitespacesAndNewlines)
         store.saveNames(UserNames(a: a.isEmpty ? "A" : a, b: b.isEmpty ? "B" : b))
         isEditingNames = false
+    }
+
+    // MARK: - Input order
+
+    private var inputOrderCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("記録の入力順")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(Theme.textMuted)
+            HStack(spacing: 8) {
+                ForEach(EntryInputOrder.allCases, id: \.self) { order in
+                    let selected = inputOrderRaw == order.rawValue
+                    Button {
+                        inputOrderRaw = order.rawValue
+                    } label: {
+                        Text(order.label)
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundStyle(selected ? Theme.textPrimary : Theme.textMuted)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
+                            .background(selected ? Theme.background : Color.white, in: RoundedRectangle(cornerRadius: 10))
+                            .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(selected ? Theme.textPrimary : Theme.border, lineWidth: 1.5))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+        .padding(16)
+        .background(Color.white, in: RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.05), radius: 6, y: 1)
     }
 
     // MARK: - Books
