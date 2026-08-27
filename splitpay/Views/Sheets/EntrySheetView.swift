@@ -35,6 +35,19 @@ struct EntrySheetView: View {
         focusedField = fieldOrder[newIdx]
     }
 
+    /// メモのEnter、または金額欄側の完了ボタンから呼ばれる。
+    /// まだ次のフィールドが残っていればそちらへフォーカスを移し、
+    /// 最後のフィールドなら入力を確定して記録する。
+    private func handleReturnOrDone(from field: Field) {
+        guard let idx = fieldOrder.firstIndex(of: field) else { return }
+        if idx < fieldOrder.count - 1 {
+            focusedField = fieldOrder[idx + 1]
+        } else {
+            focusedField = nil
+            submit()
+        }
+    }
+
     private var color: Color {
         switch sheet {
         case .payment(let user): return Theme.userColor(user)
@@ -109,7 +122,9 @@ struct EntrySheetView: View {
                 Spacer()
 
                 Button("完了") {
-                    focusedField = nil
+                    if let field = focusedField {
+                        handleReturnOrDone(from: field)
+                    }
                 }
                 .font(.system(size: 15, weight: .semibold))
             }
@@ -202,9 +217,9 @@ struct EntrySheetView: View {
                 .background(Theme.background, in: RoundedRectangle(cornerRadius: 12))
                 .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(Theme.border, lineWidth: 1.5))
                 .focused($focusedField, equals: .memo)
-                .submitLabel(.done)
+                .submitLabel(fieldOrder.last == .memo ? .done : .next)
                 .onSubmit {
-                    focusedField = nil
+                    handleReturnOrDone(from: .memo)
                 }
         }
     }
