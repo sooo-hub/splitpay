@@ -1,9 +1,12 @@
 import Foundation
 import FirebaseFirestore
 
-/// Web版 (splitpay.jsx) の `doc(db, "warikan", "shared")` と全く同じドキュメントを
-/// リアルタイム購読・更新する。データ構造もWeb版に完全準拠:
-///   warikan/shared = { books: [...], entries: [...], names: {A,B}, memos: [...] }
+/// Web版 (splitpay.jsx) が使う `warikan/shared` からコピーした
+/// `warikan/app` ドキュメントをリアルタイム購読・更新する。
+/// 2026-08-28時点でWeb版と1回だけ内容をコピーし、以後はこのアプリ専用のデータとして分離管理する
+/// (Web版の変更はこちらに反映されず、このアプリの変更もWeb版には反映されない)。
+/// データ構造はWeb版に完全準拠:
+///   warikan/app = { books: [...], entries: [...], names: {A,B}, memos: [...] }
 @MainActor
 final class FirestoreStore: ObservableObject {
     @Published var books: [Book] = [Book.defaultBook]
@@ -13,7 +16,7 @@ final class FirestoreStore: ObservableObject {
     @Published var isLoading = true
     @Published var lastSync: Date?
 
-    private let docRef = Firestore.firestore().collection("warikan").document("shared")
+    private let docRef = Firestore.firestore().collection("warikan").document("app")
     private var listener: ListenerRegistration?
 
     func start() {
