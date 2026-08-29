@@ -53,8 +53,18 @@ struct EntrySheetView: View {
         return false
     }
 
-    /// Entry.Kindごとのアクセントカラー。新規作成(.payment/.borrow/.repay)と
-    /// 編集(.edit)の両方でこのマッピング1つだけを使う。
+    /// sheetが表すEntry.Kind(+ payment時のuser)。色・アイコンのマッピングは
+    /// すべてこの1組の値から導出し、新規作成(.payment/.borrow/.repay)と
+    /// 編集(.edit)とで別々に定義しない。
+    private var resolvedKind: (kind: Entry.Kind, user: String?) {
+        switch sheet {
+        case .payment(let user): return (.payment, user)
+        case .borrow: return (.borrow, nil)
+        case .repay: return (.repayment, nil)
+        case .edit(let entry): return (entry.type, entry.user)
+        }
+    }
+
     private func accentColor(for kind: Entry.Kind, user: String?) -> Color {
         switch kind {
         case .payment: return Theme.userColor(user ?? "A")
@@ -65,12 +75,7 @@ struct EntrySheetView: View {
     }
 
     private var color: Color {
-        switch sheet {
-        case .payment(let user): return accentColor(for: .payment, user: user)
-        case .borrow: return accentColor(for: .borrow, user: nil)
-        case .repay: return accentColor(for: .repayment, user: nil)
-        case .edit(let entry): return accentColor(for: entry.type, user: entry.user)
-        }
+        accentColor(for: resolvedKind.kind, user: resolvedKind.user)
     }
 
     private var title: String {
@@ -86,15 +91,43 @@ struct EntrySheetView: View {
         Int(amountText)
     }
 
+    /// 支払いはユーザーの頭文字アバター、それ以外は種別アイコンで、
+    /// どの入力かをタイトル横で色付きバッジとして示す
+    @ViewBuilder
+    private var headerBadge: some View {
+        let (kind, user) = resolvedKind
+        switch kind {
+        case .payment:
+            UserAvatarView(name: names[user ?? "A"], color: color, size: 30, fontSize: 12, cornerRadius: 9)
+        case .borrow:
+            headerIconBadge(systemName: "yensign.circle.fill")
+        case .repayment, .repay:
+            headerIconBadge(systemName: "checkmark.circle.fill")
+        case .reset:
+            headerIconBadge(systemName: "arrow.clockwise")
+        }
+    }
+
+    private func headerIconBadge(systemName: String) -> some View {
+        Image(systemName: systemName)
+            .font(.system(size: 15, weight: .semibold))
+            .foregroundStyle(.white)
+            .frame(width: 30, height: 30)
+            .background(color, in: RoundedRectangle(cornerRadius: 9))
+    }
+
     var body: some View {
         ScrollView {
             // フォーカスの有無でレイアウトを切り替えると要素の位置がガクッと動いて
             // 不自然になるため、常に上詰めの同じ配置で固定する
             VStack(alignment: .leading, spacing: 0) {
-                Text(title)
-                    .font(.system(size: 17, weight: .bold))
-                    .foregroundStyle(Theme.textPrimary)
-                    .padding(.bottom, 16)
+                HStack(spacing: 10) {
+                    headerBadge
+                    Text(title)
+                        .font(.system(size: 17, weight: .bold))
+                        .foregroundStyle(Theme.textPrimary)
+                }
+                .padding(.bottom, 16)
 
                 if case .borrow = sheet {
                     borrowerPicker
@@ -277,10 +310,10 @@ struct EntrySheetView: View {
         } label: {
             Text("キャンセル")
                 .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(Theme.textSecondary)
+                .foregroundStyle(color)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .background(Theme.background, in: RoundedRectangle(cornerRadius: 14))
+                .background(color.opacity(0.08), in: RoundedRectangle(cornerRadius: 14))
         }
         .buttonStyle(.plain)
     }
