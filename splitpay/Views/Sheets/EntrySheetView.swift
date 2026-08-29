@@ -7,6 +7,7 @@ struct EntrySheetView: View {
     let names: UserNames
     let onSubmit: (Entry) -> Void
 
+    @Environment(\.dismiss) private var dismiss
     @State private var borrower = "A"
     @State private var amountText = ""
     @State private var memo = ""
@@ -118,6 +119,9 @@ struct EntrySheetView: View {
                 }
 
                 submitButton
+                    .padding(.bottom, 10)
+
+                cancelButton
             }
             .padding(24)
         }
@@ -265,6 +269,20 @@ struct EntrySheetView: View {
         }
         .buttonStyle(.plain)
         .disabled(!enabled)
+    }
+
+    private var cancelButton: some View {
+        Button {
+            dismiss()
+        } label: {
+            Text("キャンセル")
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(Theme.textSecondary)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .background(Theme.background, in: RoundedRectangle(cornerRadius: 14))
+        }
+        .buttonStyle(.plain)
     }
 
     private func submit() {
