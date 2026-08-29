@@ -196,9 +196,13 @@ struct EntrySheetView: View {
                 memo = entry.memo ?? ""
                 borrower = entry.borrower ?? "A"
             }
-            // 開いた瞬間からキーボードを表示し、すぐ入力できるようにする
-            // (シートはフォーカスにより画面上部近くまで広がるが許容する)
-            focusedField = fieldOrder.first
+            // 開いた瞬間にフォーカスすると、シート自身の表示アニメーションと
+            // キーボード出現(それに伴うシート拡大)が重なって一瞬カクつく。
+            // シートの開くアニメーションが収まってからフォーカスすることで、
+            // 「シートが開く」→「キーボードが出る」を分離し、滑らかに見せる。
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                focusedField = fieldOrder.first
+            }
         }
     }
 
