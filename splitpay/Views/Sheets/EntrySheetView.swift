@@ -84,9 +84,6 @@ struct EntrySheetView: View {
     var body: some View {
         GeometryReader { geo in
             ScrollView {
-                // シートの高さいっぱいにフレームを確保したうえで下寄せにすることで、
-                // シート自体がキーボード回避で大きく広がっても、入力欄・ボタンは
-                // 常にキーボードのすぐ上に来るようにする(上に大きな空白ができるのを防ぐ)
                 VStack(alignment: .leading, spacing: 0) {
                     Text(title)
                         .font(.system(size: 17, weight: .bold))
@@ -118,7 +115,10 @@ struct EntrySheetView: View {
                     submitButton
                 }
                 .padding(24)
-                .frame(minHeight: geo.size.height, alignment: .bottom)
+                // 未入力時(キーボード無し)は上詰めでコンパクトに、
+                // 入力欄にフォーカスしてキーボードが出ている間は下詰めにして、
+                // シートがどれだけ広がってもキーボードのすぐ上に来るようにする
+                .frame(minHeight: geo.size.height, alignment: focusedField == nil ? .top : .bottom)
             }
         }
         .background(Color.white)
@@ -159,7 +159,10 @@ struct EntrySheetView: View {
                 memo = entry.memo ?? ""
                 borrower = entry.borrower ?? "A"
             }
-            focusedField = fieldOrder.first
+            // 開いた瞬間に自動でフォーカスすると、シート表示と同時にキーボード分の
+            // 領域確保でシートが画面上部近くまで一気に広がってしまう。
+            // フォーカスは実際にユーザーが欄をタップするまで当てず、シートは
+            // まずコンテンツに近いコンパクトな高さで開く。
         }
     }
 
