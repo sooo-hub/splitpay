@@ -82,44 +82,40 @@ struct EntrySheetView: View {
     }
 
     var body: some View {
-        GeometryReader { geo in
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text(title)
-                        .font(.system(size: 17, weight: .bold))
-                        .foregroundStyle(Theme.textPrimary)
+        ScrollView {
+            // フォーカスの有無でレイアウトを切り替えると要素の位置がガクッと動いて
+            // 不自然になるため、常に上詰めの同じ配置で固定する
+            VStack(alignment: .leading, spacing: 0) {
+                Text(title)
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundStyle(Theme.textPrimary)
+                    .padding(.bottom, 16)
+
+                if case .borrow = sheet {
+                    borrowerPicker
                         .padding(.bottom, 16)
-
-                    if case .borrow = sheet {
-                        borrowerPicker
-                            .padding(.bottom, 16)
-                    }
-
-                    if case .repay(let borrow) = sheet {
-                        repayTargetCard(borrow)
-                            .padding(.bottom, 16)
-                    }
-
-                    if isMemoFirst {
-                        memoField
-                            .padding(.bottom, 14)
-                        amountField
-                            .padding(.bottom, 22)
-                    } else {
-                        amountField
-                            .padding(.bottom, 14)
-                        memoField
-                            .padding(.bottom, 22)
-                    }
-
-                    submitButton
                 }
-                .padding(24)
-                // 未入力時(キーボード無し)は上詰めでコンパクトに、
-                // 入力欄にフォーカスしてキーボードが出ている間は下詰めにして、
-                // シートがどれだけ広がってもキーボードのすぐ上に来るようにする
-                .frame(minHeight: geo.size.height, alignment: focusedField == nil ? .top : .bottom)
+
+                if case .repay(let borrow) = sheet {
+                    repayTargetCard(borrow)
+                        .padding(.bottom, 16)
+                }
+
+                if isMemoFirst {
+                    memoField
+                        .padding(.bottom, 14)
+                    amountField
+                        .padding(.bottom, 22)
+                } else {
+                    amountField
+                        .padding(.bottom, 14)
+                    memoField
+                        .padding(.bottom, 22)
+                }
+
+                submitButton
             }
+            .padding(24)
         }
         .background(Color.white)
         .toolbar {
