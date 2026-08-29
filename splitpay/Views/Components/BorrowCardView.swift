@@ -17,11 +17,7 @@ struct BorrowCardView: View {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 8) {
-                        Text(names[borrow.borrower].uppercased().first.map(String.init) ?? "?")
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundStyle(.white)
-                            .frame(width: 26, height: 26)
-                            .background(Theme.colorBorrow, in: RoundedRectangle(cornerRadius: 7))
+                        UserAvatarView(name: names[borrow.borrower], color: Theme.colorBorrow, size: 26, fontSize: 12, cornerRadius: 7)
                         Text("\(names[borrow.borrower]) が借りた")
                             .font(.system(size: 14, weight: .bold))
                             .foregroundStyle(Theme.textPrimary)
@@ -90,7 +86,6 @@ struct BorrowCardView: View {
             .buttonStyle(.plain)
         }
         .padding(16)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.07), radius: 12, y: 2)
+        .cardStyle(cornerRadius: 16, shadowOpacity: 0.07, shadowRadius: 12, shadowY: 2)
     }
 }

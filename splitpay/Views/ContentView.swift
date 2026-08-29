@@ -54,10 +54,6 @@ struct ContentView: View {
     @State private var showReset = false
     @State private var deleteTarget: Entry?
 
-    private var computed: BookComputedState {
-        WarikanCalculator.compute(entries: store.entries, bookId: bookId)
-    }
-
     private var currentBook: Book? {
         store.books.first { $0.id == bookId }
     }
@@ -67,6 +63,10 @@ struct ContentView: View {
     }
 
     var body: some View {
+        // WarikanCalculator.compute はソート・集計を伴うためbody内で一度だけ計算し、
+        // 以降(content/ResetSheetView/performReset)はこのローカル値を使い回す。
+        let computed = WarikanCalculator.compute(entries: store.entries, bookId: bookId)
+
         ZStack {
             Theme.background.ignoresSafeArea()
 
@@ -84,7 +84,7 @@ struct ContentView: View {
                     )
 
                     ScrollView {
-                        content
+                        content(computed: computed)
                             .padding(.bottom, 90)
                     }
                 }
@@ -123,7 +123,7 @@ struct ContentView: View {
                 totA: computed.totA,
                 totB: computed.totB,
                 activeBorrowCount: computed.activeBorrows.count,
-                onConfirm: performReset
+                onConfirm: { performReset(computed: computed) }
             )
             .presentationDetents([.medium])
             .presentationDragIndicator(.hidden)
@@ -143,7 +143,7 @@ struct ContentView: View {
     }
 
     @ViewBuilder
-    private var content: some View {
+    private func content(computed: BookComputedState) -> some View {
         switch tab {
         case .home:
             HomeView(
@@ -180,7 +180,7 @@ struct ContentView: View {
         }
     }
 
-    private func performReset() {
+    private func performReset(computed: BookComputedState) {
         let snapshot: [String: Double]
         if curMode == .debt {
             snapshot = ["activeBorrows": Double(computed.activeBorrows.count)]

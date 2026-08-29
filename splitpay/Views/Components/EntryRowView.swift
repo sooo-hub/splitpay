@@ -66,7 +66,7 @@ struct EntryRowView: View {
     // MARK: - borrow
 
     private var borrowRow: some View {
-        HStack(spacing: 10) {
+        rowCard {
             iconBox(systemName: "yensign.circle.fill", background: isCompleted ? Color(hex: "#AAAAAA") : Theme.colorBorrow)
             VStack(alignment: .leading, spacing: 1) {
                 HStack(spacing: 6) {
@@ -89,12 +89,6 @@ struct EntryRowView: View {
             Spacer(minLength: 0)
             deleteButton(color: Color(hex: "#CCCCCC"))
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 12)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 12))
-        .shadow(color: .black.opacity(0.05), radius: 6, y: 1)
-        .contentShape(Rectangle())
-        .onTapGesture(perform: onEdit)
     }
 
     private var borrowSubtitle: String {
@@ -105,7 +99,7 @@ struct EntryRowView: View {
     // MARK: - repayment
 
     private var repaymentRow: some View {
-        HStack(spacing: 10) {
+        rowCard {
             iconBox(systemName: "checkmark.circle.fill", background: Theme.colorRepay)
             VStack(alignment: .leading, spacing: 1) {
                 Text(Formatting.yen(entry.amount ?? 0))
@@ -118,26 +112,14 @@ struct EntryRowView: View {
             Spacer(minLength: 0)
             deleteButton(color: Color(hex: "#CCCCCC"))
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 12)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 12))
-        .shadow(color: .black.opacity(0.05), radius: 6, y: 1)
-        .contentShape(Rectangle())
-        .onTapGesture(perform: onEdit)
     }
 
     // MARK: - payment
 
     private var paymentRow: some View {
         let user = entry.user ?? "A"
-        let color = Theme.userColor(user)
-        let initial = names[user].uppercased().first.map(String.init) ?? "?"
-        return HStack(spacing: 10) {
-            Text(initial)
-                .font(.system(size: 11, weight: .bold))
-                .foregroundStyle(.white)
-                .frame(width: 28, height: 28)
-                .background(color, in: RoundedRectangle(cornerRadius: 8))
+        return rowCard {
+            UserAvatarView(name: names[user], color: Theme.userColor(user))
             VStack(alignment: .leading, spacing: 1) {
                 Text(Formatting.yen(entry.amount ?? 0))
                     .font(.system(size: 15, weight: .bold))
@@ -149,15 +131,19 @@ struct EntryRowView: View {
             Spacer(minLength: 0)
             deleteButton(color: Color(hex: "#CCCCCC"))
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 12)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 12))
-        .shadow(color: .black.opacity(0.05), radius: 6, y: 1)
-        .contentShape(Rectangle())
-        .onTapGesture(perform: onEdit)
     }
 
     // MARK: - shared pieces
+
+    /// borrow/repayment/payment各行に共通する、白背景カード+タップで編集を開く外枠
+    private func rowCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        HStack(spacing: 10, content: content)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .cardStyle(cornerRadius: 12)
+            .contentShape(Rectangle())
+            .onTapGesture(perform: onEdit)
+    }
 
     private func iconBox(systemName: String, background: Color) -> some View {
         Image(systemName: systemName)

@@ -147,8 +147,7 @@ struct HomeView: View {
         .padding(.top, 28)
         .padding(.bottom, 22)
         .padding(.horizontal, 24)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 22))
-        .shadow(color: .black.opacity(0.06), radius: 20, y: 2)
+        .cardStyle(cornerRadius: 22, shadowOpacity: 0.06, shadowRadius: 20, shadowY: 2)
     }
 
     // MARK: - 借りモード
@@ -176,19 +175,7 @@ struct HomeView: View {
             .padding(.bottom, 12)
 
             if computed.activeBorrows.isEmpty {
-                VStack(spacing: 4) {
-                    Image(systemName: "checkmark.seal.fill").font(.system(size: 36)).foregroundStyle(Theme.colorRepay).padding(.bottom, 8)
-                    Text("借りなし！")
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundStyle(Theme.colorRepay)
-                    Text("現在、借りている記録はありません")
-                        .font(.system(size: 12))
-                        .foregroundStyle(Theme.textFaint)
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 40)
-                .background(Color.white, in: RoundedRectangle(cornerRadius: 16))
-                .shadow(color: .black.opacity(0.04), radius: 8, y: 1)
+                emptyState(systemName: "checkmark.seal.fill", title: "借りなし！", subtitle: "現在、借りている記録はありません", accentColor: Theme.colorRepay)
             } else {
                 ForEach(computed.activeBorrows) { borrow in
                     BorrowCardView(
@@ -213,15 +200,22 @@ struct HomeView: View {
             .padding(.bottom, 8)
     }
 
-    private func emptyState(systemName: String, title: String, subtitle: String) -> some View {
-        VStack(spacing: 8) {
-            Image(systemName: systemName).font(.system(size: 36)).foregroundStyle(Theme.textFaint).padding(.bottom, 4)
-            Text(title).font(.system(size: 14)).foregroundStyle(Theme.textSecondary)
+    /// アイコン・タイトル・サブタイトルを縦に並べた空状態カード。
+    /// `accentColor`を指定すると、アイコンとタイトルをその色・太字で強調表示する
+    /// (借りモードの「借りなし！」のような達成状態の表示に使う)。
+    private func emptyState(systemName: String, title: String, subtitle: String, accentColor: Color? = nil) -> some View {
+        VStack(spacing: accentColor == nil ? 8 : 4) {
+            Image(systemName: systemName)
+                .font(.system(size: 36))
+                .foregroundStyle(accentColor ?? Theme.textFaint)
+                .padding(.bottom, accentColor == nil ? 4 : 8)
+            Text(title)
+                .font(.system(size: accentColor == nil ? 14 : 16, weight: accentColor == nil ? .regular : .bold))
+                .foregroundStyle(accentColor ?? Theme.textSecondary)
             Text(subtitle).font(.system(size: 12)).foregroundStyle(Theme.textFaint)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 40)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.04), radius: 8, y: 1)
+        .cardStyle(cornerRadius: 16, shadowOpacity: 0.04, shadowRadius: 8, shadowY: 1)
     }
 }

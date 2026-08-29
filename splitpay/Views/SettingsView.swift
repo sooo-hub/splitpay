@@ -13,6 +13,14 @@ struct SettingsView: View {
 
     @AppStorage(EntryInputOrder.storageKey) private var inputOrderRaw = EntryInputOrder.amountFirst.rawValue
 
+    /// book毎の記録件数。bookRowはForEachでbook数ぶん描画されるため、
+    /// 都度entries全体をfilterせずに済むよう1回だけ集計しておく。
+    private var entryCountByBookId: [String: Int] {
+        store.entries.reduce(into: [:]) { counts, entry in
+            counts[entry.bookId, default: 0] += 1
+        }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             sectionLabel("ユーザー名")
@@ -25,7 +33,7 @@ struct SettingsView: View {
 
             sectionLabel("ページ一覧")
             ForEach(store.books) { book in
-                bookRow(book)
+                bookRow(book, entryCount: entryCountByBookId[book.id, default: 0])
                     .padding(.bottom, 8)
             }
 
@@ -89,8 +97,7 @@ struct SettingsView: View {
             }
         }
         .padding(16)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.05), radius: 6, y: 1)
+        .cardStyle(cornerRadius: 16)
     }
 
     private func nameDisplayRow(user: String) -> some View {
@@ -156,13 +163,12 @@ struct SettingsView: View {
             }
         }
         .padding(16)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.05), radius: 6, y: 1)
+        .cardStyle(cornerRadius: 16)
     }
 
     // MARK: - Books
 
-    private func bookRow(_ book: Book) -> some View {
+    private func bookRow(_ book: Book, entryCount: Int) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 8) {
@@ -174,9 +180,9 @@ struct SettingsView: View {
                         .foregroundStyle(book.mode == .debt ? Theme.colorBorrow : Theme.colorB)
                         .padding(.horizontal, 7)
                         .padding(.vertical, 2)
-                        .background(book.mode == .debt ? Theme.colorBorrow.opacity(0.1) : Color(hex: "#E8F4FF"), in: Capsule())
+                        .background(book.mode == .debt ? Theme.colorBorrow.opacity(0.1) : Theme.colorBTint, in: Capsule())
                 }
-                Text("\(store.entries.filter { $0.bookId == book.id }.count) 件の記録")
+                Text("\(entryCount) 件の記録")
                     .font(.system(size: 11))
                     .foregroundStyle(Theme.textMuted)
             }
@@ -194,21 +200,19 @@ struct SettingsView: View {
         }
         .padding(.vertical, 14)
         .padding(.horizontal, 16)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 12))
         .overlay(alignment: .leading) {
             Rectangle()
                 .fill(bookId == book.id ? Theme.textPrimary : Color.clear)
                 .frame(width: 3)
                 .clipShape(RoundedRectangle(cornerRadius: 1.5))
         }
-        .shadow(color: .black.opacity(0.05), radius: 6, y: 1)
+        .cardStyle(cornerRadius: 12)
     }
 
     private func deleteBook(_ book: Book) {
         guard store.books.count > 1 else { return }
         let remaining = store.books.filter { $0.id != book.id }
-        store.saveBooks(remaining)
-        store.saveEntries(store.entries.filter { $0.bookId != book.id })
+        store.saveBooksAndEntries(remaining, store.entries.filter { $0.bookId != book.id })
         if bookId == book.id {
             bookId = remaining.first?.id ?? Book.defaultBook.id
         }
@@ -223,7 +227,7 @@ struct SettingsView: View {
                 .foregroundStyle(Theme.textMuted)
 
             HStack(spacing: 8) {
-                modeButton(.split, label: "差額", color: Theme.colorB, tintBg: Color(hex: "#E8F4FF"))
+                modeButton(.split, label: "差額", color: Theme.colorB, tintBg: Theme.colorBTint)
                 modeButton(.debt, label: "借り", color: Theme.colorBorrow, tintBg: Theme.colorBorrow.opacity(0.08))
             }
 
@@ -248,8 +252,7 @@ struct SettingsView: View {
             }
         }
         .padding(16)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.05), radius: 6, y: 1)
+        .cardStyle(cornerRadius: 16)
     }
 
     private func modeButton(_ mode: Book.Mode, label: String, color: Color, tintBg: Color) -> some View {

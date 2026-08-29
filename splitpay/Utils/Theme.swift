@@ -14,9 +14,20 @@ enum Theme {
     static let textFaint = Color(hex: "#BBBBBB")
     static let border = Color(hex: "#EDE9E2")
     static let cardBackground = Color.white
+    /// colorBの淡色タイル背景(差額モードのバッジ・カード等で使用)
+    static let colorBTint = Color(hex: "#E8F4FF")
 
     static func userColor(_ user: String) -> Color {
         user == "A" ? colorA : colorB
+    }
+}
+
+extension View {
+    /// 白背景+角丸+影の、アプリ内で繰り返し使われるカードスタイル
+    func cardStyle(cornerRadius: CGFloat, shadowOpacity: Double = 0.05, shadowRadius: CGFloat = 6, shadowY: CGFloat = 1) -> some View {
+        self
+            .background(Theme.cardBackground, in: RoundedRectangle(cornerRadius: cornerRadius))
+            .shadow(color: .black.opacity(shadowOpacity), radius: shadowRadius, y: shadowY)
     }
 }
 

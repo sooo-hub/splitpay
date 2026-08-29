@@ -7,7 +7,6 @@ struct EntrySheetView: View {
     let names: UserNames
     let onSubmit: (Entry) -> Void
 
-    @Environment(\.dismiss) private var dismiss
     @State private var borrower = "A"
     @State private var amountText = ""
     @State private var memo = ""
@@ -41,7 +40,7 @@ struct EntrySheetView: View {
     private func handleReturnOrDone(from field: Field) {
         guard let idx = fieldOrder.firstIndex(of: field) else { return }
         if idx < fieldOrder.count - 1 {
-            focusedField = fieldOrder[idx + 1]
+            moveFocus(by: 1)
         } else {
             focusedField = nil
             submit()
@@ -53,18 +52,23 @@ struct EntrySheetView: View {
         return false
     }
 
+    /// Entry.Kindごとのアクセントカラー。新規作成(.payment/.borrow/.repay)と
+    /// 編集(.edit)の両方でこのマッピング1つだけを使う。
+    private func accentColor(for kind: Entry.Kind, user: String?) -> Color {
+        switch kind {
+        case .payment: return Theme.userColor(user ?? "A")
+        case .borrow: return Theme.colorBorrow
+        case .repayment, .repay: return Theme.colorRepay
+        case .reset: return Theme.textMuted
+        }
+    }
+
     private var color: Color {
         switch sheet {
-        case .payment(let user): return Theme.userColor(user)
-        case .borrow: return Theme.colorBorrow
-        case .repay: return Theme.colorRepay
-        case .edit(let entry):
-            switch entry.type {
-            case .payment: return Theme.userColor(entry.user ?? "A")
-            case .borrow: return Theme.colorBorrow
-            case .repayment, .repay: return Theme.colorRepay
-            case .reset: return Theme.textMuted
-            }
+        case .payment(let user): return accentColor(for: .payment, user: user)
+        case .borrow: return accentColor(for: .borrow, user: nil)
+        case .repay: return accentColor(for: .repayment, user: nil)
+        case .edit(let entry): return accentColor(for: entry.type, user: entry.user)
         }
     }
 

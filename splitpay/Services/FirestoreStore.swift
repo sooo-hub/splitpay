@@ -62,6 +62,17 @@ final class FirestoreStore: ObservableObject {
         docRef.setData(["books": newBooks.map { $0.asDict }], merge: true)
     }
 
+    /// booksとentriesを1回のFirestore書き込みでまとめて保存する。
+    /// ページ削除のように両方を同時に変更する操作で、2回の別々な書き込みを避けるために使う。
+    func saveBooksAndEntries(_ newBooks: [Book], _ newEntries: [Entry]) {
+        books = newBooks
+        entries = newEntries
+        docRef.setData([
+            "books": newBooks.map { $0.asDict },
+            "entries": newEntries.map { $0.asDict }
+        ], merge: true)
+    }
+
     func saveEntries(_ newEntries: [Entry]) {
         entries = newEntries
         docRef.setData(["entries": newEntries.map { $0.asDict }], merge: true)

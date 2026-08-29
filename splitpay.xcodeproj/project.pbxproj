@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00C504B70A7A89126549070E /* UserAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6561E456B5CA0861CD5B1782 /* UserAvatarView.swift */; };
 		02A9D5BD39A39D84FFE1C34F /* BottomNavView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442001573E912488D061688 /* BottomNavView.swift */; };
 		06CFFFAC9804BE5B2FC6845E /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB54F64B431CBDFD6B875771 /* Memo.swift */; };
 		10F89DFEF3B7EF121C906FD7 /* BorrowCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F84CE10577C169F89594AF /* BorrowCardView.swift */; };
 		18B15FDD42F7B9B07CBC1721 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA733BBFC73A2D95766FD813 /* Theme.swift */; };
 		1C6354953B1C25EC32FF0E32 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83FF20D1E94B9F126ED3315 /* AppSettings.swift */; };
 		2A47446ECBE92F43CAC69FAA /* ResetSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E03D8EB78D414C7EE3980F /* ResetSheetView.swift */; };
+		2D189CF5FC742ED7938B8520 /* ConfirmationButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE57358F59B1F9776D296996 /* ConfirmationButtonsView.swift */; };
 		3B1DFE23C4F1377610B5AE64 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3393359C93984129FB1F5FD7 /* ContentView.swift */; };
 		3CE28A277979B796C8995EC6 /* WarikanCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A8D1B6C25DDEEA50493BEF /* WarikanCalculator.swift */; };
 		4224557BDD03DEB446FDE40D /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = F0A1B244DF534A163D914E09 /* FirebaseFirestore */; };
@@ -46,6 +48,7 @@
 		3393359C93984129FB1F5FD7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4040386167C819005B199B95 /* FirestoreStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreStore.swift; sourceTree = "<group>"; };
 		56742F8D4B405466B210F6D8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6561E456B5CA0861CD5B1782 /* UserAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatarView.swift; sourceTree = "<group>"; };
 		67F84CE10577C169F89594AF /* BorrowCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorrowCardView.swift; sourceTree = "<group>"; };
 		69479883B133AF14E48CDB76 /* DeleteConfirmSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteConfirmSheetView.swift; sourceTree = "<group>"; };
 		7452215C72A517C6C699F189 /* MemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoView.swift; sourceTree = "<group>"; };
@@ -55,11 +58,12 @@
 		92E03D8EB78D414C7EE3980F /* ResetSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetSheetView.swift; sourceTree = "<group>"; };
 		9AB7911EB2D0DD2E566116A4 /* splitpayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = splitpayApp.swift; sourceTree = "<group>"; };
 		9EE5760761FDA5428F8A0DE8 /* EntrySheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntrySheetView.swift; sourceTree = "<group>"; };
-		A97BD120304DE6DEB528667C /* splitpay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = splitpay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A97BD120304DE6DEB528667C /* splitpay.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = splitpay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB54F64B431CBDFD6B875771 /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
 		C09584F3E9625B99D31C38FD /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
 		C9B1BFC1A079345BB4E7E495 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		D0BEF5C30E086E3F11A1743D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DE57358F59B1F9776D296996 /* ConfirmationButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationButtonsView.swift; sourceTree = "<group>"; };
 		EA733BBFC73A2D95766FD813 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		F83FF20D1E94B9F126ED3315 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		F85C63B5C4F011F4DC0AE151 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
@@ -99,7 +103,9 @@
 			children = (
 				67F84CE10577C169F89594AF /* BorrowCardView.swift */,
 				2442001573E912488D061688 /* BottomNavView.swift */,
+				DE57358F59B1F9776D296996 /* ConfirmationButtonsView.swift */,
 				12E86CA33D067997948918E0 /* EntryRowView.swift */,
+				6561E456B5CA0861CD5B1782 /* UserAvatarView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -208,6 +214,8 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
 			};
 			buildConfigurationList = F9F26C1D2E9476B43273A222 /* Build configuration list for PBXProject "splitpay" */;
 			developmentRegion = en;
@@ -253,6 +261,7 @@
 				5A2DA6705758C3E22C261F37 /* Book.swift in Sources */,
 				10F89DFEF3B7EF121C906FD7 /* BorrowCardView.swift in Sources */,
 				02A9D5BD39A39D84FFE1C34F /* BottomNavView.swift in Sources */,
+				2D189CF5FC742ED7938B8520 /* ConfirmationButtonsView.swift in Sources */,
 				3B1DFE23C4F1377610B5AE64 /* ContentView.swift in Sources */,
 				8EC507A64F9239C86B018B5E /* DeleteConfirmSheetView.swift in Sources */,
 				91DC427E727C06347C42ECD6 /* Entry.swift in Sources */,
@@ -268,6 +277,7 @@
 				2A47446ECBE92F43CAC69FAA /* ResetSheetView.swift in Sources */,
 				A7D9520989A320660B1EAFEE /* SettingsView.swift in Sources */,
 				18B15FDD42F7B9B07CBC1721 /* Theme.swift in Sources */,
+				00C504B70A7A89126549070E /* UserAvatarView.swift in Sources */,
 				527A4FA36E40734E67384E9A /* UserNames.swift in Sources */,
 				3CE28A277979B796C8995EC6 /* WarikanCalculator.swift in Sources */,
 				638B53DB84FFF6E4C58C6C81 /* splitpayApp.swift in Sources */,
@@ -284,7 +294,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B2PN4MKG33;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = splitpay/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -364,7 +373,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B2PN4MKG33;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = splitpay/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;

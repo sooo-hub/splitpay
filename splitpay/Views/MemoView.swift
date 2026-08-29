@@ -69,8 +69,7 @@ struct MemoView: View {
             .disabled(newMemoText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isSubmitting)
         }
         .padding(16)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.05), radius: 6, y: 1)
+        .cardStyle(cornerRadius: 16)
     }
 
     private func memoCard(_ memo: Memo) -> some View {
@@ -110,8 +109,7 @@ struct MemoView: View {
                     }
                 }
                 .padding(14)
-                .background(Color.white, in: RoundedRectangle(cornerRadius: 14))
-                .shadow(color: .black.opacity(0.05), radius: 6, y: 1)
+                .cardStyle(cornerRadius: 14)
             } else {
                 HStack(alignment: .top, spacing: 10) {
                     VStack(alignment: .leading, spacing: 6) {
@@ -146,8 +144,7 @@ struct MemoView: View {
                     }
                 }
                 .padding(14)
-                .background(Color.white, in: RoundedRectangle(cornerRadius: 14))
-                .shadow(color: .black.opacity(0.05), radius: 6, y: 1)
+                .cardStyle(cornerRadius: 14)
             }
         }
     }

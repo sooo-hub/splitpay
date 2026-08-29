@@ -8,9 +8,7 @@ struct HeaderView: View {
 
     private var syncLabel: String {
         guard let lastSync else { return "更新" }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: lastSync)
+        return Formatting.time(lastSync)
     }
 
     var body: some View {

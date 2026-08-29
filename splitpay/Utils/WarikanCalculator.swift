@@ -29,25 +29,34 @@ struct WarikanCalculator {
         let diff = totA - totB
 
         // 借りモード
-        func remaining(of borrow: Entry, in pool: [Entry]) -> BorrowWithProgress {
-            let repaid = pool
-                .filter { $0.type.isRepayment && $0.borrowId == borrow.id }
-                .reduce(0) { $0 + ($1.amount ?? 0) }
+        // borrowId毎の返済合計を1回の走査で事前に集計しておくことで、
+        // borrow件数 × entries件数のO(n*m)を避けてO(n)にする。
+        func repaidByBorrowId(in pool: [Entry]) -> [String: Double] {
+            pool.reduce(into: [String: Double]()) { dict, entry in
+                guard entry.type.isRepayment, let borrowId = entry.borrowId else { return }
+                dict[borrowId, default: 0] += entry.amount ?? 0
+            }
+        }
+
+        func remaining(of borrow: Entry, repaidById: [String: Double]) -> BorrowWithProgress {
+            let repaid = repaidById[borrow.id] ?? 0
             let amount = borrow.amount ?? 0
             return BorrowWithProgress(entry: borrow, repaid: repaid, remaining: amount - repaid)
         }
 
+        let activeRepaidById = repaidByBorrowId(in: activeEntries)
         let borrowsInPeriod = activeEntries
             .filter { $0.type == .borrow }
-            .map { remaining(of: $0, in: activeEntries) }
+            .map { remaining(of: $0, repaidById: activeRepaidById) }
         let activeBorrows = borrowsInPeriod.filter { $0.remaining > 0 }
 
         // completedBorrowIds は allCur 全体(リセットをまたいでも)で判定する。
         // 履歴タブでリセット前の完済も正しく「完済」表示するため。
+        let allRepaidById = repaidByBorrowId(in: allCur)
         let completedBorrowIds = Set(
             allCur
                 .filter { $0.type == .borrow }
-                .map { remaining(of: $0, in: allCur) }
+                .map { remaining(of: $0, repaidById: allRepaidById) }
                 .filter { $0.remaining <= 0 }
                 .map { $0.id }
         )

@@ -21,6 +21,12 @@ enum Formatting {
         return f
     }()
 
+    private static let timeFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "HH:mm"
+        return f
+    }()
+
     /// ¥1,234 形式（絶対値・四捨五入）
     static func yen(_ amount: Double) -> String {
         let rounded = (abs(amount)).rounded()
@@ -38,6 +44,11 @@ enum Formatting {
 
     static func parseISODate(_ isoString: String) -> Date? {
         isoFormatterWithFractional.date(from: isoString) ?? isoFormatter.date(from: isoString)
+    }
+
+    /// Date を "HH:mm" 形式で表示
+    static func time(_ date: Date) -> String {
+        timeFormatter.string(from: date)
     }
 
     static func nowISOString() -> String {

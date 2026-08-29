@@ -38,30 +38,7 @@ struct ResetSheetView: View {
             .lineSpacing(6)
             .padding(.bottom, 20)
 
-            HStack(spacing: 10) {
-                Button {
-                    dismiss()
-                } label: {
-                    Text("キャンセル")
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(Theme.textSecondary)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 14)
-                        .background(Theme.background, in: RoundedRectangle(cornerRadius: 14))
-                }
-                .buttonStyle(.plain)
-
-                Button(action: onConfirm) {
-                    Text("リセットする")
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 14)
-                        .background(Theme.colorA, in: RoundedRectangle(cornerRadius: 14))
-                        .shadow(color: Theme.colorA.opacity(0.3), radius: 10, y: 4)
-                }
-                .buttonStyle(.plain)
-            }
+            ConfirmationButtonsView(confirmLabel: "リセットする", onCancel: { dismiss() }, onConfirm: onConfirm)
         }
         .padding(24)
         .background(Color.white)

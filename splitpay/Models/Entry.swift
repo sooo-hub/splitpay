@@ -24,9 +24,9 @@ struct Entry: Identifiable, Equatable {
     var date: String        // ISO8601
     var snapshot: [String: Double]?  // reset用: {totA, totB} または {debt} など
 
-    var dateValue: Date {
-        Formatting.parseISODate(date) ?? .distantPast
-    }
+    /// dateのパース結果。ソート等で繰り返し使われるため、毎回パースし直さず
+    /// init時に一度だけ計算して保持する。
+    let dateValue: Date
 
     init?(dict: [String: Any]) {
         guard let id = dict["id"] as? String,
@@ -41,6 +41,7 @@ struct Entry: Identifiable, Equatable {
         self.bookId = bookId
         self.type = kind
         self.date = date
+        self.dateValue = Formatting.parseISODate(date) ?? .distantPast
         self.user = dict["user"] as? String
         self.borrower = dict["borrower"] as? String
         self.borrowId = dict["borrowId"] as? String
@@ -73,6 +74,7 @@ struct Entry: Identifiable, Equatable {
         self.amount = amount
         self.memo = memo
         self.date = date
+        self.dateValue = Formatting.parseISODate(date) ?? .distantPast
         self.snapshot = snapshot
     }
 
